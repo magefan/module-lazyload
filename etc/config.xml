@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2017 Ihor Vansach (ihor@magefan.com). All rights reserved.
+ * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mflazyzoad>
+            <general>
+                <lazy_blocks>footer
+category.products.list
+search_result_list
+catalog.product.related
+product.info.upsell
+product.info.details
+checkout.cart.crosssellgit</lazy_blocks>
+            </general>
+        </mflazyzoad>
+    </default>
+</config>

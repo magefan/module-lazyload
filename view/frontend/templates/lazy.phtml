@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © 2017 Ihor Vansach (ihor@magefan.com). All rights reserved.
+ * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+?>
+
+<script data-rocketjavascript="false">
+(function(){
+	var jsSrc = '<?php echo $this->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js'); ?>'
+	function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement("script")).type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName("script")[0]).parentNode.insertBefore(a,r)}
+    loadScript(jsSrc, function(){
+        var myLazyLoad = new LazyLoad();
+    	return true;
+    });
+})();
+</script>
