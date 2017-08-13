@@ -15,7 +15,7 @@
         <section id="mflazyzoad" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
             <label>Lazy Load</label>
             <tab>magefan</tab>
-            <resource>Magefan_RocketJavaScript::config_magefan_lazyload</resource>
+            <resource>Magefan_LazyLoad::config_magefan_lazyload</resource>
             <group id="general" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
                 <label>General</label>
                 <attribute type="expanded">1</attribute>
