@@ -6,10 +6,12 @@
  * Glory to Ukraine! Glory to the heroes!
  */
 
-namespace Magefan\LazyLoad\Observer;
+namespace Magefan\LazyLoad\Plugin;
 
-
-class CoreLayoutRenderElement implements \Magento\Framework\Event\ObserverInterface
+/**
+ * Plugin for sitemap generation
+ */
+class BlockPlugin
 {
     /**
      * Request
@@ -41,38 +43,53 @@ class CoreLayoutRenderElement implements \Magento\Framework\Event\ObserverInterf
         $this->scopeConfig = $scopeConfig;
     }
 
+
     /**
-     * @param  \Magento\Framework\Event\Observer
-     * @return \Magento\Framework\Event\Observer this object
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
+     * @param string $html
+     * @return string
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function afterToHtml(\Magento\Framework\View\Element\AbstractBlock $block, $html)
     {
-        if (PHP_SAPI === 'cli'
-            || !in_array($observer->getElementName(), $this->getBlocks())
-            || $this->request->isXmlHttpRequest()
-            || !$this->isEnabled()
-        ) {
-            return;
+        if (!$this->isEnabled($block)) {
+            return $html;
         }
 
-        $transport = $observer->getTransport();
-        $html = $transport->getOutput();
+        $html = preg_replace('#<img\s+([^>]*)(?:src="([^"]*)")([^>]*)\/?>#isU', '<img src="' .
+            $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '" ' .
+            'data-original="$2" $1 $3/>', $html);
 
-        $html = preg_replace('#<img\s+([^>]*)(?:src="([^"]*)")([^>]*)\/?>#isU', '<img data-original="$2" $1 $3/>', $html);
-
-        // var_dump($html);
-        // exit();
-
-        $transport->setOutput($html);
+        /*
+        $i = $block->getNameInLayout(). ' ' . $block->getBlockId() . ' ' . get_class($block);
+        $html =  'start of <br/><br/>'. $i . $html;
+        */
+        return $html;
     }
 
-    protected function isEnabled()
+    /**
+     * Check if lazy load is available
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
+     * @return boolean
+     */
+    protected function isEnabled($block)
     {
+        if (PHP_SAPI === 'cli' || $this->request->isXmlHttpRequest()) {
+            return false;
+        }
+
+        $blockName = $block->getBlockId() ?: $block->getNameInLayout();
+        $blocks = $this->getBlocks();
+
+        if (!in_array($blockName, $blocks)
+            && !in_array(get_class($block), $blocks)
+        ) {
+            return false;
+        }
+
         $enabled = $this->scopeConfig->getValue(
             'mflazyzoad/general/enabled',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-
 
         /* check if Plumrocket AMP enabled */
         if ($enabled) {
@@ -90,9 +107,14 @@ class CoreLayoutRenderElement implements \Magento\Framework\Event\ObserverInterf
             }
             $enabled = !$isAmpRequest;
         }
+
         return $enabled;
     }
 
+    /**
+     * Retrieve alloved blocks info
+     * @return array
+     */
     protected function getBlocks()
     {
         if (null === $this->blocks) {
