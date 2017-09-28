@@ -7,7 +7,7 @@
   * To enable or disable extension please navigate to Magento 2 Admin Panel > Stores > Magefan Extensions > Lazy Load
 
 ## Requirements
-  * Magento Community Edition 2.1.x or Magento Enterprise Edition 2.1.x
+  * Magento Community Edition 2.0.x-2.2.x or Magento Enterprise Edition 2.0.x-2.2.x
 
 ## Installation Method 1 - Installing via composer
   * Open command line
