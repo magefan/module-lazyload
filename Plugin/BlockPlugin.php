@@ -30,17 +30,27 @@ class BlockPlugin
      */
     protected $blocks;
 
+    /**
+     * Core store config
+     *
+     * @var \Magefan\LazyLoad\Model\Config
+     */
+    protected $config;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface            $request
+     * BlockPlugin constructor.
+     * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magefan\LazyLoad\Model\Config $config
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magefan\LazyLoad\Model\Config $config
     ) {
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
+        $this->config = $config;
     }
 
 
@@ -78,61 +88,17 @@ class BlockPlugin
         }
 
         $blockName = $block->getBlockId() ?: $block->getNameInLayout();
-        $blocks = $this->getBlocks();
+        $blockTemplate = $block->getTemplate();
+        $blocks = $this->config->getBlocks();
 
         if (!in_array($blockName, $blocks)
             && !in_array(get_class($block), $blocks)
+            && !in_array($blockTemplate, $blocks)
         ) {
             return false;
         }
 
-        $enabled = $this->scopeConfig->getValue(
-            'mflazyzoad/general/enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-
-        /* check if Plumrocket AMP enabled */
-        if ($enabled) {
-            $isAmpRequest = $this->scopeConfig->getValue(
-                'pramp/general/enabled',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-            if ($isAmpRequest) {
-                /* We know that using objectManager is not a not a good practice,
-                but if Plumrocket_AMP is not installed on your magento instance
-                you'll get error during di:compile */
-                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                $isAmpRequest = $objectManager->get('\Plumrocket\Amp\Helper\Data')
-                    ->isAmpRequest();
-            }
-            $enabled = !$isAmpRequest;
-        }
-
-        return $enabled;
+        return $this->config->getEnabled();
     }
 
-    /**
-     * Retrieve alloved blocks info
-     * @return array
-     */
-    protected function getBlocks()
-    {
-        if (null === $this->blocks) {
-            $blocks = $this->scopeConfig->getValue(
-                'mflazyzoad/general/lazy_blocks',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-
-            $blocks = str_replace(["\r\n", "\n'\r", "\n"], "\r", $blocks);
-            $blocks = explode("\r", $blocks);
-            $this->blocks = [];
-            foreach ($blocks as $block) {
-                if ($block = trim($block)) {
-                    $this->blocks[] = $block;
-                }
-            }
-        }
-
-        return $this->blocks;
-    }
 }
