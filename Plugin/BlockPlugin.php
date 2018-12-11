@@ -111,5 +111,4 @@ class BlockPlugin
 
         return true;
     }
-
 }

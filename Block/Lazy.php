@@ -31,5 +31,4 @@ class Lazy extends \Magento\Framework\View\Element\Template
 
         return '';
     }
-
 }
