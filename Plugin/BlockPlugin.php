@@ -72,10 +72,15 @@ class BlockPlugin
             return $html;
         }
 
-        $html = preg_replace('#<img\s+([^>]*)(?:src="([^"]*)")([^>]*)\/?>#isU', '<img src="' .
-            $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '" ' .
+        $pixelSrc = 'src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
+        $tmpSrc = 'TMP_SRC';
+
+        $html = str_replace($pixelSrc, $tmpSrc, $html);
+
+        $html = preg_replace('#<img\s+([^>]*)(?:src="([^"]*)")([^>]*)\/?>#isU', '<img ' . $pixelSrc .
             'data-original="$2" $1 $3/>', $html);
 
+        $html = str_replace($tmpSrc, $pixelSrc, $html);
         $html = str_replace(self::LAZY_TAG, '', $html);
 
         return $html;
