@@ -9,33 +9,60 @@
 
 <script data-rocketjavascript="false">
 (function(){
-	var jsSrc = '<?php echo $this->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js'); ?>'
-	function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement("script")).type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName("script")[0]).parentNode.insertBefore(a,r)}
+    var jsSrc = '<?php echo $this->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js'); ?>'
+    function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement("script")).type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName("script")[0]).parentNode.insertBefore(a,r)}
     loadScript(jsSrc, function(){
         if (document.readyState !== 'loading') {
-          	var myLazyLoad = new LazyLoad();
+            var myLazyLoad = new LazyLoad();
         } else {
-        	document.addEventListener("DOMContentLoaded", function() {
-	            var myLazyLoad = new LazyLoad();        
-	        });
+            document.addEventListener("DOMContentLoaded", function() {
+                var myLazyLoad = new LazyLoad();        
+            });
         }
-    	return true;
+        return true;
     });
 })();
 </script>
 <script>
-	require(['jquery', 'domReady!'], function($){
-		var l = 'loaded';
-		$('.product.info.detailed .data.item.title a').click(function(){
-			$('.product.info.detailed img[data-original^="h"]').each(function(){
-				var $t = $(this);
-				if (!$t.hasClass(l)) {
-					var src = $t.data('original');
-					if (src) {
-						$t.attr('src', src).addClass(l);
-					}
-				}
-			});
-		});
-	});
+    require(['jquery', 'domReady!'], function($){
+        /* Fix for product tabs */
+        var l = 'loaded';
+        $('.product.info.detailed .data.item.title a').click(function(){
+            $('.product.info.detailed img[data-original^="h"]').each(function(){
+                var $t = $(this);
+                if (!$t.hasClass(l)) {
+                    var src = $t.data('original');
+                    if (src) {
+                        $t.attr('src', src).addClass(l);
+                    }
+                }
+            });
+        });
+
+        /* Fix for sliders */
+        var intr = setInterval(function(){
+            $sliders = $('.slick-track, .swiper-wrapper, .owl-carousel');
+            if (!$sliders.length) clearInterval(intr);
+
+            $sliders.each(function() {
+                var $imgs = $(this).find('img');
+                var c = 0;
+                $imgs.each(function(){
+                    var $img = $(this);
+                    if ($img.attr('src') && $img.attr('src').indexOf('pixel.jpg') != -1) {
+                        c++;
+                    }
+                });
+                if (c && $imgs.length != c) {
+                    $imgs.each(function(){
+                        var $img = $(this);
+                        var src = $img.data('original');
+                        if (src) {
+                            $img.attr('src', src);
+                        }
+                    });
+                }
+            });
+        }, 2000);
+    });
 </script>
