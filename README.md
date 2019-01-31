@@ -1,4 +1,4 @@
-# [Magefan](http://magefan.com/) Lazy Load Extension for Magento 2
+#  Magento 2 Image Lazy Load Extension by [Magefan](http://magefan.com/) 
 
 ## Features
   * Allow to load images on your store only when customer can see them. Module reduces page size and number of request.
