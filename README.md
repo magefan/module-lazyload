@@ -1,4 +1,4 @@
-#  Magento 2 Image Lazy Load Extension by [Magefan](http://magefan.com/) 
+#  [Magento 2 Image Lazy Load Extension](https://magefan.com/magento-2-image-lazy-load-extension) by [Magefan](https://magefan.com/) 
 
 
 [![Total Downloads](https://poser.pugx.org/magefan/module-lazyload/downloads)](https://packagist.org/packages/magefan/module-lazyload)
@@ -11,7 +11,7 @@
   * To enable or disable extension please navigate to Magento 2 Admin Panel > Stores > Magefan Extensions > Lazy Load
 
 ## Requirements
-  * Magento Community Edition 2.0.x-2.2.x or Magento Enterprise Edition 2.0.x-2.2.x
+  * Magento Community Edition 2.0.x-2.3.x or Magento Enterprise Edition 2.0.x-2.3.x
 
 ## Installation Method 1 - Installing via composer
   * Open command line
