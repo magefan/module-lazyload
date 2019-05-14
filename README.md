@@ -8,7 +8,7 @@
   * Allow to load images on your store only when customer can see them. Module reduces page size and number of request.
 
 ## Configuration
-  * To enable or disable extension please navigate to Magento 2 Admin Panel > Stores > Magefan Extensions > Lazy Load
+  * [Magento 2 Image Lazy Load Configuration](https://magefan.com/blog/configure-image-lazy-load-in-magento-2)
 
 ## Requirements
   * Magento Community Edition 2.0.x-2.3.x or Magento Enterprise Edition 2.0.x-2.3.x
