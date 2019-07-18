@@ -13,8 +13,8 @@
 ## Requirements
   * Magento Community Edition 2.0.x-2.3.x or Magento Enterprise Edition 2.0.x-2.3.x
 
-## Installation Instructions
-* [Installing via Composer / Installing using archive](https://magefan.com/blog/magento-2-image-lazy-load-extension-installation)
+## Installation
+* [Install Magento 2 Image Lazy Load via Composer or an archive](https://magefan.com/blog/magento-2-image-lazy-load-extension-installation)
 
 
 ## Support
