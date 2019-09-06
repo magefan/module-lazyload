@@ -16,7 +16,9 @@
 ## Installation
 * [Install Magento 2 Image Lazy Load via Composer or an archive](https://magefan.com/blog/magento-2-image-lazy-load-extension-installation)
 
-
+```bash
+composer require magefan/module-lazyload
+```
 ## Support
 If you have any issues, please [contact us](mailto:support@magefan.com)
 then if you still need help, open a bug report in GitHub's
