@@ -17,7 +17,7 @@ search_result_list
 catalog.product.related
 product.info.upsell
 product.info.details
-checkout.cart.crosssellgit</lazy_blocks>
+checkout.cart.crosssell</lazy_blocks>
             </general>
         </mflazyzoad>
     </default>
