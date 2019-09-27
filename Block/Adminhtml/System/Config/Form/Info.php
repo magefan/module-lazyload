@@ -43,7 +43,8 @@ class Info extends \Magento\Config\Block\System\Config\Form\Field
     {
         $m = $this->moduleList->getOne($this->getModuleName());
         $html = '<div style="padding:10px;background-color:#f8f8f8;border:1px solid #ddd;margin-bottom:7px;">
-            Lazy Load Extension v' . $m['setup_version'] . ' was developed by <a href="http://magefan.com/" target="_blank">Magefan</a>.
+            Lazy Load Extension v' . $m['setup_version'] . ' was developed by 
+            <a href="http://magefan.com/" target="_blank">Magefan</a>.
         </div>';
 
         return $html;

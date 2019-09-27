@@ -60,7 +60,6 @@ class BlockPlugin
         );
     }
 
-
     /**
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @param string $html
