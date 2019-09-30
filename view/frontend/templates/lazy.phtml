@@ -9,7 +9,7 @@
 
 <script data-rocketjavascript="false">
 (function(){
-    var jsSrc = '<?= $this->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js'); ?>'
+    var jsSrc = '<?= $block->escapeUrl($block->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js')); ?>'
     function loadScript(e,t) {
         var a,n,r;
         n=!1,

@@ -81,7 +81,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
                     but if Plumrocket_AMP is not installed on your magento instance
                     you'll get error during di:compile */
                     $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-                    $isAmpRequest = $objectManager->get('\Plumrocket\Amp\Helper\Data')
+                    $isAmpRequest = $objectManager->get(\Plumrocket\Amp\Helper\Data::class)
                         ->isAmpRequest();
                 }
                 $this->enabled = !$isAmpRequest;
