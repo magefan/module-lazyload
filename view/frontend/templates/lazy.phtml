@@ -13,10 +13,10 @@
     function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement("script")).type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName("script")[0]).parentNode.insertBefore(a,r)}
     loadScript(jsSrc, function(){
         if (document.readyState !== 'loading') {
-            var myLazyLoad = new LazyLoad();
+            var myLazyLoad = new LazyLoad({'elements_selector' : 'img,div'});
         } else {
             document.addEventListener("DOMContentLoaded", function() {
-                var myLazyLoad = new LazyLoad();        
+                var myLazyLoad = new LazyLoad({'elements_selector' : 'img,div'});        
             });
         }
         return true;
