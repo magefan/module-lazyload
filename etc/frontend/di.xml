@@ -16,4 +16,9 @@
         <plugin name="magefan_lazyload_lock"
                 type="Magefan\LazyLoad\Plugin\BlockPlugin" sortOrder="1000"/>
     </type>
+    <!-- Integration with Amasty_PageSpeedOptimizer -->
+    <type name="Amasty\PageSpeedOptimizer\Model\Output\LazyLoadProcessor">
+        <plugin name="magefan_lazyLoad_plugin_amasty_pagespeedoptimizer_model_output_lazyloadprocessor_plugin"
+                type="Magefan\LazyLoad\Plugin\Amasty\PageSpeedOptimizer\Model\Output\LazyLoadProcessorPlugin" sortOrder="1000"/>
+    </type>
 </config>

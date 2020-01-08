@@ -8,24 +8,24 @@
 ?>
 
 <script data-rocketjavascript="false">
-(function(){
-    var jsSrc = '<?php echo $this->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js'); ?>'
-    function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement("script")).type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName("script")[0]).parentNode.insertBefore(a,r)}
-    loadScript(jsSrc, function(){
-        var lazyLoadConfig = {
-            'elements_selector' : 'img,div',
-            'data_srcset' : 'originalset'
-        };
-        if (document.readyState !== 'loading') {
-            var myLazyLoad = new LazyLoad(lazyLoadConfig);
-        } else {
-            document.addEventListener("DOMContentLoaded", function() {
-                var myLazyLoad = new LazyLoad(lazyLoadConfig);        
-            });
-        }
-        return true;
-    });
-})();
+    (function(){
+        var jsSrc = '<?php echo $this->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js'); ?>'
+        function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement("script")).type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName("script")[0]).parentNode.insertBefore(a,r)}
+        loadScript(jsSrc, function(){
+            var lazyLoadConfig = {
+                'elements_selector' : 'img,div',
+                'data_srcset' : 'originalset'
+            };
+            if (document.readyState !== 'loading') {
+                var myLazyLoad = new LazyLoad(lazyLoadConfig);
+            } else {
+                document.addEventListener("DOMContentLoaded", function() {
+                    var myLazyLoad = new LazyLoad(lazyLoadConfig);
+                });
+            }
+            return true;
+        });
+    })();
 </script>
 <script>
     require(['jquery', 'domReady!'], function($){
@@ -42,12 +42,10 @@
                 }
             });
         });
-
         /* Fix for sliders */
         var intr = setInterval(function(){
             $sliders = $('.slick-track, .swiper-wrapper, .owl-carousel');
             if (!$sliders.length) clearInterval(intr);
-
             $sliders.each(function() {
                 var $imgs = $(this).find('img');
                 var c = 0;
