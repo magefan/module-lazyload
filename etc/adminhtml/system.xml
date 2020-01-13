@@ -1,19 +1,16 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2017 Ihor Vansach (ihor@magefan.com). All rights reserved.
- * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
  *
  * Glory to Ukraine! Glory to the heroes!
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="magefan" sortOrder="110" translate="label">
-            <label>Magefan Extensions</label>
-        </tab>
         <section id="mflazyzoad" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
-            <label>Lazy Load</label>
+            <label>Image Lazy Load</label>
             <tab>magefan</tab>
             <resource>Magefan_LazyLoad::config_magefan_lazyload</resource>
             <group id="general" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
@@ -26,9 +23,20 @@
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="key" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Key</label>
+                    <frontend_model>Magefan\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
+                </field>
                 <field id="lazy_blocks" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label" type="textarea">
                     <label>Lazy Load Blocks</label>
-                    <comment>Lazy load functionality will be automatically applied to images inside this blocks. Please enter each block name in a new line.</comment>
+                    <comment><![CDATA[
+                        Lazy load functionality will be automatically applied to images inside this blocks. You can use block name, block PHP class, or .phtml template name. Please enter each name in a new line.<br/>
+                        <strong>Example:</strong><br/>
+                        block.name.in.layout<br/>
+                        \Vendor\ModuleName\Block\SomeBlock\Interceptor<br/>
+                        Vendor_ModuleName::folder/mytemplate.phtml<br/>
+                        folder/sometemplate.phtml
+                        ]]></comment>
                 </field>
             </group>
         </section>

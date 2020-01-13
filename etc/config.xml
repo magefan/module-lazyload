@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2017 Ihor Vansach (ihor@magefan.com). All rights reserved.
- * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
  *
  * Glory to Ukraine! Glory to the heroes!
  */
@@ -18,6 +18,8 @@ catalog.product.related
 product.info.upsell
 product.info.details
 checkout.cart.crosssell</lazy_blocks>
+                <mfmodule>LazyLoad</mfmodule>
+                <mftype>1</mftype>
             </general>
         </mflazyzoad>
     </default>

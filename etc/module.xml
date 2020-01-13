@@ -1,12 +1,16 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2017 Ihor Vansach (ihor@magefan.com). All rights reserved.
- * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
  *
  * Glory to Ukraine! Glory to the heroes!
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-	<module name="Magefan_LazyLoad" setup_version="2.0.7"/>
+	<module name="Magefan_LazyLoad" setup_version="2.0.8">
+		<sequence>
+			<module name="Magefan_Community"/>
+		</sequence>
+	</module>
 </config>
