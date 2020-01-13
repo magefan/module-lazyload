@@ -20,7 +20,7 @@
                     <frontend_model>Magefan\LazyLoad\Block\Adminhtml\System\Config\Form\Info</frontend_model>
                 </field>
                 <field id="enabled" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" type="select">
-                    <label>Enabled</label>
+                    <label>Enable Extension</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="key" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
