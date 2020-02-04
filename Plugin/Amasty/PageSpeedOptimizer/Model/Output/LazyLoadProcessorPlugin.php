@@ -8,12 +8,26 @@
 
 namespace Magefan\LazyLoad\Plugin\Amasty\PageSpeedOptimizer\Model\Output;
 
+use Magefan\LazyLoad\Model\Config;
+
 /**
  * Class LazyLoadProcessorPlugin
  * @package Magefan\LazyLoad\Plugin\Amasty\PageSpeedOptimizer\Model\Output
  */
 class LazyLoadProcessorPlugin
 {
+/**
+     * @var Config
+     */
+    private $config;
+
+    public function __construct(
+        Config $config
+
+    ) {
+        $this->config = $config;
+    }
+
     /**
      * @param $subject
      * @param callable $proceed
@@ -23,6 +37,10 @@ class LazyLoadProcessorPlugin
      */
     public function aroundReplaceWithPictureTag($subject, callable $proceed, $image, $imagePath)
     {
+        if (!$this->config->getEnabled()) {
+            return $proceed($image, $imagePath);
+        }
+
         $originImagePath = $imagePath;
         if (strpos($imagePath, 'Magefan_LazyLoad/images/pixel.jpg')) {
 

@@ -8,7 +8,9 @@
 
 namespace Magefan\LazyLoad\Plugin\Magefan\WebP\Model;
 
+use Magefan\LazyLoad\Model\Config;
 use Magefan\WebP\Model\WebP;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Class WebPPlugin
@@ -18,20 +20,32 @@ class WebPPlugin
     const LAZY_TAG = '<!-- MAGEFAN_LAZY_LOAD -->';
 
     /**
-     * @var Convertor
+     * @var WebP 
      */
     private $webp;
 
+    /**
+     * @var Config 
+     */
+    private $config;
+
     public function __construct(
-        WebP  $webp
+        WebP  $webp,
+        Config $config,
+        File $fileDriver
 
     ) {
         $this->webp = $webp;
+        $this->config = $config;
+        $this->fileDriver = $fileDriver;
     }
 
     public function aroundGetPictureTagHtml($subject, callable $proceed, $webpUrl, $imagePath, $htmlTag)
     {
-        $result = false;
+
+        if (!$this->config->getEnabled()) {
+            return $proceed($webpUrl, $imagePath, $htmlTag);
+        }
 
         $originImagePath = $imagePath;
 
@@ -47,13 +61,15 @@ class WebPPlugin
                     $imagePath = substr($htmlTag, $p1, $p2 - $p1);
                     $webpUrl = $this->webp->getWebpUrl($imagePath);
 
-                    $result = $this->webp->convert($imagePath, $webpUrl);
-
                 }
             }
+
+        } else {
+
+            return  $proceed($webpUrl, $imagePath, $htmlTag);
         }
 
-        if (!$result) {
+        if (!$this->fileDriver->isExists($this->webp->getPathFromUrl($imagePath))) {
             return $htmlTag;
         }
 
