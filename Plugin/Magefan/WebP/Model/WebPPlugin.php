@@ -6,21 +6,25 @@
  * Glory to Ukraine! Glory to the heroes!
  */
 
-namespace Magefan\LazyLoad\Plugin\Amasty\PageSpeedOptimizer\Model\Output;
+namespace Magefan\LazyLoad\Plugin\Magefan\WebP\Model;
 
 use Magefan\LazyLoad\Model\Config;
 
 /**
- * Class LazyLoadProcessorPlugin
- * @package Magefan\LazyLoad\Plugin\Amasty\PageSpeedOptimizer\Model\Output
+ * Class WebPPlugin
  */
-class LazyLoadProcessorPlugin
+class WebPPlugin
 {
-/**
+
+    /**
      * @var Config
      */
     private $config;
 
+    /**
+     * WebPPlugin constructor.
+     * @param Config $config
+     */
     public function __construct(
         Config $config
 
@@ -31,14 +35,14 @@ class LazyLoadProcessorPlugin
     /**
      * @param $subject
      * @param callable $proceed
-     * @param $image
      * @param $imagePath
-     * @return mixed|null|string|string[]
+     * @param $htmlTag
+     * @return mixed|string|string[]|null
      */
-    public function aroundReplaceWithPictureTag($subject, callable $proceed, $image, $imagePath)
+    public function aroundGetPictureTagHtml($subject, callable $proceed, $imagePath, $image)
     {
         if (!$this->config->getEnabled()) {
-            return $proceed($image, $imagePath);
+            return $proceed($imagePath, $image);
         }
 
         $originImagePath = $imagePath;
@@ -47,7 +51,7 @@ class LazyLoadProcessorPlugin
 
             $doStr = 'data-original="';
             $p1 = strpos($image, $doStr);
-            
+
             if ($p1 !== false) {
                 $p1 += strlen($doStr);
                 $p2 = strpos($image, '"', $p1);
@@ -57,9 +61,10 @@ class LazyLoadProcessorPlugin
             }
         }
 
-        $html = $proceed($image, $imagePath);
+        $html = $proceed($imagePath, $image);
 
         if ($originImagePath != $imagePath) {
+
             if (strpos($html, '<picture') !== false) {
                 $tmpSrc = 'TMP_SRC';
                 $pixelSrc = 'srcset="' . $originImagePath . '"';
@@ -74,6 +79,5 @@ class LazyLoadProcessorPlugin
         }
 
         return $html;
-
     }
 }

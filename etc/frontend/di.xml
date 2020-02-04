@@ -21,4 +21,9 @@
         <plugin name="magefan_lazyLoad_plugin_amasty_pagespeedoptimizer_model_output_lazyloadprocessor_plugin"
                 type="Magefan\LazyLoad\Plugin\Amasty\PageSpeedOptimizer\Model\Output\LazyLoadProcessorPlugin" sortOrder="1000"/>
     </type>
+    <!-- Integration with Magefan_WebP -->
+    <type name="Magefan\WebP\Model\WebP">
+        <plugin name="magefan_lazyLoad_plugin_for_webp"
+                type="Magefan\LazyLoad\Plugin\Magefan\WebP\Model\WebPPlugin" sortOrder="10000"/>
+    </type>
 </config>
