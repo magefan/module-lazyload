@@ -42,10 +42,12 @@ class LazyLoadProcessorPlugin
         }
 
         $originImagePath = $imagePath;
+
         if (strpos($imagePath, 'Magefan_LazyLoad/images/pixel.jpg')) {
 
             $doStr = 'data-original="';
             $p1 = strpos($image, $doStr);
+            
             if ($p1 !== false) {
                 $p1 += strlen($doStr);
                 $p2 = strpos($image, '"', $p1);
