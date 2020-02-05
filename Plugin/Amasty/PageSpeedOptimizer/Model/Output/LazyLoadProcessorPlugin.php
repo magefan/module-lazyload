@@ -12,7 +12,6 @@ use Magefan\LazyLoad\Model\Config;
 
 /**
  * Class LazyLoadProcessorPlugin
- * @package Magefan\LazyLoad\Plugin\Amasty\PageSpeedOptimizer\Model\Output
  */
 class LazyLoadProcessorPlugin
 {
@@ -21,6 +20,10 @@ class LazyLoadProcessorPlugin
      */
     private $config;
 
+    /**
+     * LazyLoadProcessorPlugin constructor.
+     * @param Config $config
+     */
     public function __construct(
         Config $config
 
@@ -47,7 +50,7 @@ class LazyLoadProcessorPlugin
 
             $doStr = 'data-original="';
             $p1 = strpos($image, $doStr);
-            
+
             if ($p1 !== false) {
                 $p1 += strlen($doStr);
                 $p2 = strpos($image, '"', $p1);
@@ -60,6 +63,7 @@ class LazyLoadProcessorPlugin
         $html = $proceed($image, $imagePath);
 
         if ($originImagePath != $imagePath) {
+
             if (strpos($html, '<picture') !== false) {
                 $tmpSrc = 'TMP_SRC';
                 $pixelSrc = 'srcset="' . $originImagePath . '"';
@@ -74,6 +78,5 @@ class LazyLoadProcessorPlugin
         }
 
         return $html;
-
     }
 }
