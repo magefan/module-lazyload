@@ -17,7 +17,12 @@ search_result_list
 catalog.product.related
 product.info.upsell
 product.info.details
-checkout.cart.crosssell</lazy_blocks>
+checkout.cart.crosssell
+blog.post
+blog.posts.list
+blog.sidebar
+blog.post.relatedproducts
+product.info.description</lazy_blocks>
                 <mfmodule>LazyLoad</mfmodule>
                 <mftype>1</mftype>
             </general>
