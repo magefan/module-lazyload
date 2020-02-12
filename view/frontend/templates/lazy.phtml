@@ -13,7 +13,7 @@
         function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement("script")).type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName("script")[0]).parentNode.insertBefore(a,r)}
         loadScript(jsSrc, function(){
             var lazyLoadConfig = {
-                'elements_selector' : 'img,div',
+                'elements_selector' : '*',
                 'data_srcset' : 'originalset'
             };
             if (document.readyState !== 'loading') {
