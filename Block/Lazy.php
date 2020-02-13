@@ -31,23 +31,4 @@ class Lazy extends \Magento\Framework\View\Element\Template
 
         return '';
     }
-
-    /**
-     * Retrieve lazy load config json string
-     *
-     * @return string
-     */
-    public function getLazyLoadConfig()
-    {
-        $config = $this->getData('lazy_load_config');
-
-        if (!$config || !is_array($config)) {
-            $config = [
-                'elements_selector' => 'img,div',
-                'data_srcset' => 'originalset',
-            ];
-        }
-
-        return json_encode($config);
-    }
 }

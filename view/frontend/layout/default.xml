@@ -10,14 +10,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="after.body.start">
-            <block class="Magefan\LazyLoad\Block\Lazy" name="magefan.lazyload" template="Magefan_LazyLoad::lazy.phtml" >
-                <arguments>
-                    <argument name="lazy_load_config" xsi:type="array">
-                        <item name="elements_selector" xsi:type="string">img,div</item>
-                        <item name="data_srcset" xsi:type="string">originalset</item>
-                    </argument>
-                </arguments>
-            </block>
+            <block class="Magefan\LazyLoad\Block\Lazy" name="magefan.lazyload" template="Magefan_LazyLoad::lazy.phtml" />
         </referenceBlock>
     </body>
 </page>
