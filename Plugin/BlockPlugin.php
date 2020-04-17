@@ -83,6 +83,13 @@ class BlockPlugin
         $html = str_replace($tmpSrc, $pixelSrc, $html);
         $html = str_replace(self::LAZY_TAG, '', $html);
 
+        /* Disable Owl Slider LazyLoad */
+        $html = str_replace(
+            ['"lazyLoad":true,', '&quot;lazyLoad&quot;:true,', 'owl-lazy'],
+            ['"lazyLoad":false,', '&quot;lazyLoad&quot;:false,', ''],
+            $html
+        );
+
         return $html;
     }
 
