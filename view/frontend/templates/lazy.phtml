@@ -26,23 +26,30 @@
 </script>
 <script>
     require(['jquery', 'domReady!'], function($){
+
+        function replacePixelImage() {
+            var $t = $(this);
+            if (!$t.hasClass(l)) {
+                var src = $t.data('original');
+                if (src) {
+                    $t.attr('src', src).addClass(l);
+                }
+                var srcset = $t.data('originalset');
+                if (srcset) {
+                    $t.attr('srcset', srcset).addClass(l);
+                }
+            }
+        }
+
         /* Fix for product tabs */
         var l = 'loaded';
         $('.product.info.detailed .data.item.title a').click(function(){
-            $('.product.info.detailed img[data-original^="h"],.product.info.detailed source[data-originalset^="h"]').each(function(){
-                var $t = $(this);
-                if (!$t.hasClass(l)) {
-                    var src = $t.data('original');
-                    if (src) {
-                        $t.attr('src', src).addClass(l);
-                    }
-                    var srcset = $t.data('originalset');
-                    if (srcset) {
-                        $t.attr('srcset', srcset).addClass(l);
-                    }
-                }
-            });
+            $('.product.info.detailed img[data-original^="h"],.product.info.detailed source[data-originalset^="h"]').each(replacePixelImage);
         });
+        $('.nav-sections .navigation').on('click mouseenter', function(){
+            $(this).find('img[data-original^="h"],source[data-originalset^="h"]').each(replacePixelImage);
+        });
+
         /* Fix for sliders */
         var intr = setInterval(function(){
             $sliders = $('.slick-track, .swiper-wrapper, .owl-carousel');
