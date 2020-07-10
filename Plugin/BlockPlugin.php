@@ -78,7 +78,11 @@ class BlockPlugin
         $html = str_replace($pixelSrc, $tmpSrc, $html);
 
         $html = preg_replace('#<img\s+([^>]*)(?:src="([^"]*)")([^>]*)\/?>#isU', '<img ' . $pixelSrc .
-            ' data-original="$2" $1 $3/>', $html);
+            ' data-original="$2" $1 $3/>
+            <noscript>
+                <img src="$2"  $1 $3  />
+            </noscript>
+           ', $html);
 
         $html = str_replace($tmpSrc, $pixelSrc, $html);
         $html = str_replace(self::LAZY_TAG, '', $html);
