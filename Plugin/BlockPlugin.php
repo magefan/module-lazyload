@@ -105,7 +105,13 @@ class BlockPlugin
      */
     protected function isEnabled($block, $html)
     {
-        if (PHP_SAPI === 'cli' || $this->request->isXmlHttpRequest()) {
+        if (PHP_SAPI === 'cli'
+            || $this->request->isXmlHttpRequest()
+            || false !== stripos($this->request->getFullActionName(), 'ajax')
+            || false !== stripos($this->request->getServer('REQUEST_URI'), 'ajax')
+            || $this->request->getParam('ajax')
+            || $this->request->getParam('isAjax')
+        ) {
             return false;
         }
 
