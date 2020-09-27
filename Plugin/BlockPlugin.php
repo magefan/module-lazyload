@@ -108,8 +108,7 @@ class BlockPlugin
         if (PHP_SAPI === 'cli'
             || $this->request->isXmlHttpRequest()
             || false !== stripos($this->request->getFullActionName(), 'ajax')
-            || false !== stripos($this->request->getServer('REQUEST_URI'), 'ajax')
-            || $this->request->getParam('ajax')
+            || false !== stripos($this->request->getServer('REQUEST_URI'), 'layerednavigationajax')
             || $this->request->getParam('isAjax')
         ) {
             return false;
