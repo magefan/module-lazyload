@@ -26,4 +26,9 @@
         <plugin name="magefan_lazyLoad_plugin_for_webp"
                 type="Magefan\LazyLoad\Plugin\Magefan\WebP\Model\WebPPlugin" sortOrder="10000"/>
     </type>
+
+    <type name="Magefan\WebP\Api\HtmlParserInterface">
+        <plugin name="magefan_lazyLoad_plugin_for_webp"
+                type="Magefan\LazyLoad\Plugin\Magefan\WebP\Api\HtmlParserInterfacePlugin" sortOrder="10000"/>
+    </type>
 </config>
