@@ -21,9 +21,15 @@
             var lazyLoadConfig = <?= $block->getLazyLoadConfig() ?>;
             if (document.readyState !== 'loading') {
                 var myLazyLoad = new LazyLoad(lazyLoadConfig);
+                setTimeout(function(){
+                    new LazyLoad(lazyLoadConfig);
+                }, 2000);
             } else {
                 document.addEventListener("DOMContentLoaded", function() {
                     var myLazyLoad = new LazyLoad(lazyLoadConfig);
+                    setTimeout(function(){
+                        new LazyLoad(lazyLoadConfig);
+                    }, 2000);
                 });
             }
             return true;
