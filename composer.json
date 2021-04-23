@@ -4,6 +4,10 @@
     "require": {
         "magefan/module-community" : ">=2.0.14"
     },
+    "suggest": {
+        "magefan/module-webp": "Install WebP Optimized Images to serve images in the next-gen format. Use coupon code COMPOSER-FAN to get 10% discount on magefan.com.",
+        "magefan/module-rocketjavascript": "Install Rocket JavaScript to optimize JS loading."
+    },
     "type": "magento2-module",
     "version": "2.0.14.1",
     "authors": [
