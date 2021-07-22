@@ -77,7 +77,7 @@ class BlockPlugin
 
         $html = str_replace($pixelSrc, $tmpSrc, $html);
 
-        $html = preg_replace('#<img([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
+        $html = preg_replace('#<img(?!.*mfdislazy).*([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
             ' data-original="$2" $1 $3/>
             <noscript>
                 <img src="$2"  $1 $3  />
