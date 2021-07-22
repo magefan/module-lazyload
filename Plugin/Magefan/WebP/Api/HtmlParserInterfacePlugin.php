@@ -71,7 +71,7 @@ class HtmlParserInterfacePlugin
 
                 $html = str_replace($pixelSrc, $tmpSrc, $html);
 
-                $html = preg_replace('#<source\s+([^>]*)(?:\ssrcset="([^"]*)")([^>]*)?>#isU', '<source ' . $pixelSrc .
+                $html = preg_replace('#<source([^>]*)(?:\ssrcset="([^"]*)")([^>]*)?>#isU', '<source ' . $pixelSrc .
                     ' data-originalset="$2" $1 $3/>', $html);
 
                 $html = str_replace($tmpSrc, $pixelSrc, $html);
