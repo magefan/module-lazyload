@@ -77,12 +77,14 @@ class BlockPlugin
 
         $html = str_replace($pixelSrc, $tmpSrc, $html);
 
-        $html = preg_replace('#<img(?!.*mfdislazy).*([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' . $pixelSrc .
+        $html = preg_replace('#<img([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
             ' data-original="$2" $1 $3/>
             <noscript>
                 <img src="$2"  $1 $3  />
             </noscript>
            ', $html);
+
+        $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
 
         $html = str_replace($tmpSrc, $pixelSrc, $html);
         $html = str_replace(self::LAZY_TAG, '', $html);
