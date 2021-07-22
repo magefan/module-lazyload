@@ -68,23 +68,22 @@ class BlockPlugin
      */
     public function afterToHtml(\Magento\Framework\View\Element\AbstractBlock $block, $html)
     {
+
         if (!$this->isEnabled($block, $html)) {
             return $html;
         }
 
-        $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
+        $pixelSrc = 'src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
         $tmpSrc = 'TMP_SRC';
 
         $html = str_replace($pixelSrc, $tmpSrc, $html);
 
-        $html = preg_replace('#<img\s+([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
+        $html = preg_replace('/<img(?!.*mfdislazy).*([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>/iU', '<img ' . $pixelSrc .
             ' data-original="$2" $1 $3/>
             <noscript>
                 <img src="$2"  $1 $3  />
             </noscript>
            ', $html);
-
-        $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
 
         $html = str_replace($tmpSrc, $pixelSrc, $html);
         $html = str_replace(self::LAZY_TAG, '', $html);
