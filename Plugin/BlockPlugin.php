@@ -68,17 +68,16 @@ class BlockPlugin
      */
     public function afterToHtml(\Magento\Framework\View\Element\AbstractBlock $block, $html)
     {
-
         if (!$this->isEnabled($block, $html)) {
             return $html;
         }
 
-        $pixelSrc = 'src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
+        $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
         $tmpSrc = 'TMP_SRC';
 
         $html = str_replace($pixelSrc, $tmpSrc, $html);
 
-        $html = preg_replace('/<img(?!.*mfdislazy).*([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>/iU', '<img ' . $pixelSrc .
+        $html = preg_replace('#<img(?!.*mfdislazy).*([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' . $pixelSrc .
             ' data-original="$2" $1 $3/>
             <noscript>
                 <img src="$2"  $1 $3  />
