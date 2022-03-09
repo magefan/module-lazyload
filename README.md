@@ -4,10 +4,13 @@
 [![Total Downloads](https://poser.pugx.org/magefan/module-lazyload/downloads)](https://packagist.org/packages/magefan/module-lazyload)
 [![Latest Stable Version](https://poser.pugx.org/magefan/module-lazyload/v/stable)](https://packagist.org/packages/magefan/module-lazyload)
 
+<img width="150" height="100" src="https://magefan.com/media/wysiwyg/made_in_ukraine.jpg">
+
+
 ## Features
   * Allow to load images on your store only when customer can see them. Module reduces page size and number of request.
 
-<a href="https://magefan.com/magento-2-image-lazy-load-extension"><img width="300" height="60" src="https://cm.magefan.com/mf_webp/png/media/wysiwyg/DOWNLOAD_NOW.webp"></a>
+<a href="https://magefan.com/magento-2-image-lazy-load-extension"><img width="190" height="70" src="https://magefan.com/media/wysiwyg/download-now_1.png"></a>
   
 ## Compatibility
   * [Magento 2 WebP Optimized Images Extension](https://magefan.com/magento-2-webp-optimized-images)
