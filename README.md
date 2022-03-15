@@ -25,6 +25,54 @@
 * [Using Composer](https://magefan.com/blog/magento-2-image-lazy-load-extension-installation#composer)
 * [Using Archive and FTP](https://magefan.com/blog/magento-2-image-lazy-load-extension-installation#ftp)
 
+## Demo
+
+Try out our open demo and if you like our extension **please give us some star on Github ★**
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+        Storefront Demo
+      </td>
+      <td align="center" valign="middle">
+        Admin Panel Demo
+      </td align="center" valign="middle">
+    </tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://opt.demo.magefan.top/">
+          <img
+            src="https://magefan.com/static/version1520969775/frontend/Magefan/new/en_US/images/product-tab-demo-1.jpg"
+            alt="Magento 2 Image Lazy Load Extension Storefront Demo"
+            height="220"
+          >
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://opt.demo.magefan.top/admin/admin/">
+          <img
+            src="https://magefan.com/static/version1520969775/frontend/Magefan/new/en_US/images/product-tab-demo-2.jpg"
+            alt="Magento 2 Image Lazy Load Extension Admin Panel Demo"
+            height="220"
+          >
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://opt.demo.magefan.top/">
+          view
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://opt.demo.magefan.top/admin/admin/">
+          view
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 
 
 ## Support
