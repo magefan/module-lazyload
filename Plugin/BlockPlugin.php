@@ -96,6 +96,13 @@ class BlockPlugin
             $html
         );
 
+        /* Fix for page builder bg images */
+        if (false !== strpos($html, 'background-image-')) {
+            $html = str_replace('.background-image-', '.tmpbgimg-', $html);
+            $html = str_replace('background-image-', 'mflazy-background-image mflazy-background-image-', $html);
+            $html = str_replace('.tmpbgimg-', '.background-image-', $html);
+        }
+
         return $html;
     }
 
