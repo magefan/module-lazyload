@@ -2,14 +2,14 @@
     "name": "magefan/module-lazyload",
     "description": "Images lazyloading on Magento 2 store.",
     "require": {
-        "magefan/module-community" : ">=2.1.8"
+        "magefan/module-community" : ">=2.1.9"
     },
     "suggest": {
         "magefan/module-webp": "Install WebP Optimized Images to serve images in the next-gen format. Use coupon code COMPOSER-FAN to get 10% discount on magefan.com.",
         "magefan/module-rocketjavascript": "Install Rocket JavaScript to optimize JS loading."
     },
     "type": "magento2-module",
-    "version": "2.0.16",
+    "version": "2.0.17",
     "authors": [
         {
             "name": "Magefan",
