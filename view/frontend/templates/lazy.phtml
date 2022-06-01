@@ -91,6 +91,18 @@
                         }
                     });
                 }
+
+                /* Fix for page builder bg in the slider */
+                var $mflazyBI = $(this).find('div.mflazy-background-image');
+                var $BI = $(this).find('div.background-image');
+
+                if ($mflazyBI.length && $BI.length) {
+                    $mflazyBI.each(function(){
+                        var a = this;
+                        a.className = a.className.replace(/mflazy-background-image/g, 'background-image');
+                    });
+                }
+
             });
         }, 2000);
     });
