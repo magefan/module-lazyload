@@ -6,6 +6,8 @@
  * Glory to Ukraine! Glory to the heroes!
  */
 
+declare(strict_types = 1);
+
 namespace Magefan\LazyLoad\Plugin;
 
 /**
@@ -112,7 +114,7 @@ class BlockPlugin
      * @param string $html
      * @return boolean
      */
-    protected function isEnabled($block, $html)
+    protected function isEnabled($block, string $html): bool
     {
         if (PHP_SAPI === 'cli'
             || $this->request->isXmlHttpRequest()
