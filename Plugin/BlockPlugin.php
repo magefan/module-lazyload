@@ -70,7 +70,7 @@ class BlockPlugin
      */
     public function afterToHtml(\Magento\Framework\View\Element\AbstractBlock $block, $html)
     {
-        if (!$html || !$this->isEnabled($block, $html)) {
+        if (!$this->isEnabled($block, (string)$html)) {
             return $html;
         }
 
