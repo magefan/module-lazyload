@@ -79,4 +79,55 @@ class LazyLoadProcessorPlugin
 
         return $html;
     }
+
+    /**
+     * @param $subject
+     * @param callable $proceed
+     * @param algorithm
+     * @param $image
+     * @param $imagePath
+     * @return mixed|null|string|string[]
+     */
+    public function aroundReplace($subject, callable $proceed, $algorithm, $image, $imagePath)
+    {
+
+        if (!$this->config->getEnabled()) {
+            return $proceed($algorithm, $image, $imagePath);
+        }
+
+        $originImagePath = $imagePath;
+
+        if (strpos($imagePath, 'Magefan_LazyLoad/images/pixel.jpg')) {
+
+            $doStr = 'data-original="';
+            $p1 = strpos($image, $doStr);
+
+            if ($p1 !== false) {
+                $p1 += strlen($doStr);
+                $p2 = strpos($image, '"', $p1);
+                if ($p2 !== false) {
+                    $imagePath = substr($image, $p1, $p2 - $p1);
+                }
+            }
+        }
+
+        $html = $proceed($algorithm, $image, $imagePath);
+
+        if ($originImagePath != $imagePath) {
+
+            if (strpos($html, '<picture') !== false) {
+                $tmpSrc = 'TMP_SRC';
+                $pixelSrc = 'srcset="' . $originImagePath . '"';
+
+                $html = str_replace($pixelSrc, $tmpSrc, $html);
+
+                $html = preg_replace('#<source\s+([^>]*)(?:srcset="([^"]*)")([^>]*)?>#isU', '<source ' . $pixelSrc .
+                    ' data-originalset="$2" $1 $3/>', $html);
+
+                $html = str_replace($tmpSrc, $pixelSrc, $html);
+            }
+        }
+
+        return $html;
+    }
 }
