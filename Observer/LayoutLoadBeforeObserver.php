@@ -40,11 +40,9 @@ class LayoutLoadBeforeObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->config->getEnabled()) {
+        if ($this->config->getEnabled() && $this->config->isNoScriptEnabled()) {
             $layout = $observer->getLayout();
-            if ($this->config->isNoScriptEnabled()) {
-                $layout->getUpdate()->addHandle('mflazyzoad_no_js');
-            }
+            $layout->getUpdate()->addHandle('mflazyzoad_no_js');
         }
     }
 }

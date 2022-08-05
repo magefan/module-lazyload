@@ -33,6 +33,17 @@ class Lazy extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return bool
+     */
+    public function isNoScriptEnabled()
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            \Magefan\LazyLoad\Model\Config::XML_PATH_LAZY_NOSCRIPT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
      * Retrieve lazy load config json string
      *
      * @return string

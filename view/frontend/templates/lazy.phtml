@@ -6,11 +6,7 @@
  * Glory to Ukraine! Glory to the heroes!
  */
 ?>
-<?php
-$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$config = $objectManager->get(\Magefan\LazyLoad\Model\Config::class);
-?>
-<?php if ($config->isNoScriptEnabled()) { ?>
+<?php if ($block->isNoScriptEnabled()) { ?>
     <style>
         .mflazyzoad-no-js [data-original],
         .mflazyzoad-no-js [data-originalset] {
@@ -20,7 +16,7 @@ $config = $objectManager->get(\Magefan\LazyLoad\Model\Config::class);
 <?php } ?>
 <script data-rocketjavascript="false">
     (function(){
-        <?php if ($config->isNoScriptEnabled()) { ?>
+        <?php if ($block->isNoScriptEnabled()) { ?>
             document.body.className = document.body.className.replace('mflazyzoad-no-js', '');
         <?php } ?>
         var jsSrc = '<?php echo $this->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js'); ?>';

@@ -40,7 +40,7 @@
                 </field>
                 <field id="noscript" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40" translate="label comment" type="select">
                     <label>Include Noscript HTML Tag</label>
-                    <comment>The noscript HTML element defines a section of HTML to be inserted if a script type on the page is unsupported or if scripting is currently turned off in the browser. This option enables to display of images even when JavaScript is disabled in the browser and lazy load js script cannot be loaded. Note that when enabled it adds extra HTML tags to the page.</comment>
+                    <comment>The noscript HTML element defines a section of HTML that is inserted if a script type on the page is unsupported or if scripting is currently turned off in the browser. This option enables the display of images even when JavaScript is disabled in the browser and lazy load js script cannot be loaded. Note that when enabled it adds extra HTML tags to the page.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
