@@ -79,12 +79,16 @@ class BlockPlugin
 
         $html = str_replace($pixelSrc, $tmpSrc, $html);
 
+        $noscript = '';
+        if ($this->config->isNoScriptEnabled()) {
+            $noscript = '<noscript>
+                <img src="$2"  $1 $3  />
+            </noscript>';
+        }
+
         $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
             ' data-original="$2" $1 $3/>
-            <noscript>
-                <img src="$2"  $1 $3  />
-            </noscript>
-           ', $html);
+           ' . $noscript, $html);
 
         $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
 

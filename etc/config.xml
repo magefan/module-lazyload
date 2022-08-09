@@ -25,6 +25,7 @@ blog.post.relatedproducts
 product.info.description</lazy_blocks>
                 <mfmodule>LazyLoad</mfmodule>
                 <mftype>1</mftype>
+                <noscript>1</noscript>
             </general>
         </mflazyzoad>
     </default>

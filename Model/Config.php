@@ -18,6 +18,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_ENABLED = 'mflazyzoad/general/enabled';
     const XML_PATH_AMP_ENABLED = 'pramp/general/enabled';
     const XML_PATH_LAZY_BLOCKS = 'mflazyzoad/general/lazy_blocks';
+    const XML_PATH_LAZY_NOSCRIPT = 'mflazyzoad/general/noscript';
 
     /**
      * @var array
@@ -40,6 +41,14 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             $path,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNoScriptEnabled()
+    {
+        return (bool)$this->getConfig(self::XML_PATH_LAZY_NOSCRIPT);
     }
 
     /**
