@@ -41,69 +41,81 @@
     })();
 </script>
 <script>
-    require(['jquery', 'domReady!'], function($){
-
-        function replacePixelImage() {
-            var $t = $(this);
-            if (!$t.hasClass(l)) {
-                var src = $t.data('original');
+    document.addEventListener("DOMContentLoaded", function() {
+        function replacePixelImage(img) {
+            if (!img.classList.contains('loaded')) {
+                var src = img.getAttribute('data-original');
                 if (src) {
-                    $t.attr('src', src).addClass(l);
+                    img.setAttribute('src', src);
+                    img.classList.add('loaded')
                 }
-                var srcset = $t.data('originalset');
+                var srcset = img.getAttribute('data-originalset');
                 if (srcset) {
-                    $t.attr('srcset', srcset).addClass(l);
+                    img.setAttribute('srcset', srcset);
+                    img.classList.add('loaded')
                 }
             }
         }
 
         /* Fix for product tabs */
         var l = 'loaded';
-        $('.product.info.detailed .data.item.title a').click(function(){
-            $('.product.info.detailed img[data-original^="h"],.product.info.detailed source[data-originalset^="h"]').each(replacePixelImage);
-        });
-        $('.nav-sections .navigation').on('click mouseenter', function(){
-            $(this).find('img[data-original^="h"],source[data-originalset^="h"]').each(replacePixelImage);
-        });
+        var productInfoDetailedImg = document.querySelector('.product.info.detailed .data.item.title a');
+        if(productInfoDetailedImg){
+            productInfoDetailedImg.addEventListener('click', function () {
+                document.querySelectorAll('.product.info.detailed img[data-original^="h"],.product.info.detailed source[data-originalset^="h"]').forEach(function(el){
+                    replacePixelImage(el);
+                });
+            });
+        }
+
+        var navSectionsNavigation = document.querySelector('.nav-sections .navigation');
+        if(navSectionsNavigation) {
+            navSectionsNavigation.addEventListener("click", handlerMouseEvent, false);
+            navSectionsNavigation.addEventListener("mouseenter", handlerMouseEvent, false);
+        }
+        function handlerMouseEvent(e) {
+            e.target.querySelectorAll('img[data-original^="h"],source[data-originalset^="h"]').forEach(function (el) {
+                replacePixelImage(el);
+            });
+        }
+
 
         /* Fix for sliders */
         var intr = setInterval(function(){
-            $sliders = $('.slick-track, .swiper-wrapper, .owl-carousel');
-            if (!$sliders.length) clearInterval(intr);
-            $sliders.each(function() {
-                var $imgs = $(this).find('img,source');
+            var sliders = document.querySelectorAll('.slick-track, .swiper-wrapper, .owl-carousel');
+            if (!sliders.length) clearInterval(intr);
+            sliders.forEach(function(el) {
+                var imgs = el.querySelectorAll('img,source');
                 var c = 0;
-                $imgs.each(function(){
-                    var $img = $(this);
-                    if (($img.attr('src') && $img.attr('src').indexOf('pixel.jpg') != -1)
-                        || ($img.attr('srcset') && $img.attr('srcset').indexOf('pixel.jpg') != -1)
+                imgs.forEach(function(el){
+                    if ((el.getAttribute('src') && el.getAttribute('src').indexOf('pixel.jpg') != -1)
+                        || (el.getAttribute('srcset') && el.getAttribute('srcset').indexOf('pixel.jpg') != -1)
                     ) {
                         c++;
                     }
                 });
-                if (c && $imgs.length != c) {
-                    $imgs.each(function(){
-                        var $img = $(this);
-                        var src = $img.data('original');
+                if (c && imgs.length != c) {
+                    imgs.forEach(function(el){
+                        var src = el.getAttribute('data-original');
                         if (src) {
-                            $img.attr('src', src);
+                            el.setAttribute('src', src);
                         }
 
-                        var srcset = $img.data('originalset');
+                        var srcset = el.getAttribute('data-originalset');
                         if (srcset) {
-                            $img.attr('srcset', srcset).addClass(l);
+                            el.setAttribute('srcset', srcset);
+                            el.classList.add(l)
                         }
                     });
                 }
 
                 /* Fix for page builder bg in the slider */
-                var $mflazyBI = $(this).find('div.mflazy-background-image');
-                var $BI = $(this).find('div.background-image');
+                var mflazyBI = el.querySelectorAll('div.mflazy-background-image');
+                var BI = el.querySelectorAll('div.background-image');
 
-                if ($mflazyBI.length && $BI.length) {
-                    $mflazyBI.each(function(){
-                        var a = this;
-                        a.className = a.className.replace(/mflazy-background-image/g, 'background-image');
+                if (mflazyBI.length && BI.length) {
+                    mflazyBI.forEach(function(el) {
+                        el.className = el.className.replace(/mflazy-background-image/g, 'background-image');
                     });
                 }
 
