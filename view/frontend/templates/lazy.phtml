@@ -68,11 +68,11 @@
             });
         }
 
-        var navSectionsNavigation = document.querySelector('.nav-sections .navigation');
-        if(navSectionsNavigation) {
-            navSectionsNavigation.addEventListener("click", handlerMouseEvent, false);
-            navSectionsNavigation.addEventListener("mouseenter", handlerMouseEvent, false);
-        }
+        document.querySelectorAll('.nav-sections .navigation, .navigation-bar').forEach(function(el){
+            el.addEventListener("click", handlerMouseEvent, false);
+            el.addEventListener("mouseenter", handlerMouseEvent, false);
+        });
+
         function handlerMouseEvent(e) {
             e.target.querySelectorAll('img[data-original^="h"],source[data-originalset^="h"]').forEach(function (el) {
                 replacePixelImage(el);
@@ -82,7 +82,7 @@
 
         /* Fix for sliders */
         var intr = setInterval(function(){
-            var sliders = document.querySelectorAll('.slick-track, .swiper-wrapper, .owl-carousel');
+            var sliders = document.querySelectorAll('.slick-track, .swiper-wrapper, .owl-carousel, .carousel-inner');
             if (!sliders.length) clearInterval(intr);
             sliders.forEach(function(el) {
                 var imgs = el.querySelectorAll('img,source');
