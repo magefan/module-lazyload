@@ -9,7 +9,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="mflazyzoad" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
+        <section id="mflazyzoad" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10619842770" translate="label">
             <label>Image Lazy Load</label>
             <tab>magefan</tab>
             <resource>Magefan_LazyLoad::config_magefan_lazyload</resource>
@@ -27,7 +27,7 @@
                     <label>Product Key</label>
                     <frontend_model>Magefan\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
                 </field>
-                <field id="lazy_blocks" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label" type="textarea">
+                <field id="lazy_blocks" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label" type="textarea" canRestore="1">
                     <label>Lazy Load Blocks</label>
                     <comment><![CDATA[
                         Lazy load functionality will be automatically applied to images inside this blocks. You can use block name, block PHP class, or .phtml template name. Please enter each name in a new line.<br/>
@@ -38,7 +38,7 @@
                         folder/sometemplate.phtml
                         ]]></comment>
                 </field>
-                <field id="noscript" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40" translate="label comment" type="select">
+                <field id="noscript" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40" translate="label comment" type="select" canRestore="1">
                     <label>Include Noscript HTML Tag</label>
                     <comment>The noscript HTML element defines a section of HTML that is inserted if a script type on the page is unsupported or if scripting is currently turned off in the browser. This option enables the display of images even when JavaScript is disabled in the browser and lazy load js script cannot be loaded. Note that when enabled it adds extra HTML tags to the page.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

@@ -11,6 +11,8 @@
     <default>
         <mflazyzoad>
             <general>
+                <mfmodule>LazyLoad</mfmodule>
+                <mftype>1</mftype>
                 <lazy_blocks>footer
 category.products.list
 search_result_list
@@ -22,9 +24,8 @@ blog.post
 blog.posts.list
 blog.sidebar
 blog.post.relatedproducts
-product.info.description</lazy_blocks>
-                <mfmodule>LazyLoad</mfmodule>
-                <mftype>1</mftype>
+product.info.description
+                </lazy_blocks>
                 <noscript>1</noscript>
             </general>
         </mflazyzoad>
