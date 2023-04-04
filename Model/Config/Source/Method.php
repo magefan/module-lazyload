@@ -33,7 +33,7 @@ class Method implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray(): array
     {
         return  [
-            ['value' => self::JAVASCRIPT, 'label' => __('Non-jQuer JavaScript Library')],
+            ['value' => self::JAVASCRIPT, 'label' => __('Non-jQuery JavaScript Library')],
             ['value' => self::NATIVE, 'label' => __('Native Browser Lazy Loading')],
         ];
     }
