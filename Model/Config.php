@@ -6,9 +6,9 @@
  * Glory to Ukraine! Glory to the heroes!
  */
 
-namespace Magefan\LazyLoad\Model;
+declare(strict_types=1);
 
-use Magento\Framework\App\Action\Action;
+namespace Magefan\LazyLoad\Model;
 
 /**
  * Lazy load config
@@ -18,7 +18,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_ENABLED = 'mflazyzoad/general/enabled';
     const XML_PATH_AMP_ENABLED = 'pramp/general/enabled';
     const XML_PATH_LAZY_BLOCKS = 'mflazyzoad/general/lazy_blocks';
+    const XML_PATH_LAZY_METHOD = 'mflazyzoad/general/method';
     const XML_PATH_LAZY_NOSCRIPT = 'mflazyzoad/general/noscript';
+
 
     /**
      * @var array
@@ -46,16 +48,25 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return bool
      */
-    public function isNoScriptEnabled()
+    public function getIsJavascriptLazyLoadMethod(): bool
     {
-        return (bool)$this->getConfig(self::XML_PATH_LAZY_NOSCRIPT);
+        return (0 === (int)$this->getConfig(self::XML_PATH_LAZY_METHOD));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNoScriptEnabled(): bool
+    {
+        return (bool)$this->getConfig(self::XML_PATH_LAZY_NOSCRIPT)
+            && $this->getIsJavascriptLazyLoadMethod();
     }
 
     /**
      * Retrieve alloved blocks info
      * @return array
      */
-    public function getBlocks()
+    public function getBlocks(): array
     {
         if (null === $this->blocks) {
             $blocks = $this->getConfig(self::XML_PATH_LAZY_BLOCKS);
@@ -75,12 +86,12 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Retrieve true if enabled
-     * @return int
+     * @return bool
      */
-    public function getEnabled()
+    public function getEnabled(): bool
     {
         if (null === $this->enabled) {
-            $this->enabled = $this->getConfig(self::XML_PATH_ENABLED);
+            $this->enabled = (bool)$this->getConfig(self::XML_PATH_ENABLED);
 
             /* check if Plumrocket AMP enabled */
             if ($this->enabled) {

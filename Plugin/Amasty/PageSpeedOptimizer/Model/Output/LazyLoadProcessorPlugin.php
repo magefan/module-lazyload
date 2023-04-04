@@ -6,6 +6,8 @@
  * Glory to Ukraine! Glory to the heroes!
  */
 
+declare(strict_types=1);
+
 namespace Magefan\LazyLoad\Plugin\Amasty\PageSpeedOptimizer\Model\Output;
 
 use Magefan\LazyLoad\Model\Config;
@@ -16,8 +18,8 @@ use Magefan\LazyLoad\Model\Config;
 class LazyLoadProcessorPlugin
 {
 /**
-     * @var Config
-     */
+ * @var Config
+ */
     private $config;
 
     /**
@@ -26,7 +28,6 @@ class LazyLoadProcessorPlugin
      */
     public function __construct(
         Config $config
-
     ) {
         $this->config = $config;
     }
@@ -40,7 +41,7 @@ class LazyLoadProcessorPlugin
      */
     public function aroundReplaceWithPictureTag($subject, callable $proceed, $image, $imagePath)
     {
-        if (!$this->config->getEnabled()) {
+        if (!$this->config->getEnabled() || !$this->config->getIsJavascriptLazyLoadMethod()) {
             return $proceed($image, $imagePath);
         }
 
@@ -91,7 +92,7 @@ class LazyLoadProcessorPlugin
     public function aroundReplace($subject, callable $proceed, $algorithm, $image, $imagePath)
     {
 
-        if (!$this->config->getEnabled()) {
+        if (!$this->config->getEnabled() || !$this->config->getIsJavascriptLazyLoadMethod()) {
             return $proceed($algorithm, $image, $imagePath);
         }
 

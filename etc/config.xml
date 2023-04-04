@@ -26,7 +26,8 @@ blog.sidebar
 blog.post.relatedproducts
 product.info.description
                 </lazy_blocks>
-                <noscript>1</noscript>
+                <method>0</method>
+                <noscript>0</noscript>
             </general>
         </mflazyzoad>
     </default>

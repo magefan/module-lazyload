@@ -10,6 +10,8 @@ declare(strict_types = 1);
 
 namespace Magefan\LazyLoad\Plugin;
 
+use Magefan\LazyLoad\Model\Config;
+
 /**
  * Plugin for sitemap generation
  */
@@ -43,23 +45,18 @@ class BlockPlugin
     protected $config;
 
     /**
-     * BlockPlugin constructor
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param null|\Magefan\LazyLoad\Model\Config $config
+     * @param Config $config
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        $config = null
+        Config $config
     ) {
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
-
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->config = $config ?: $objectManager->get(
-            \Magefan\LazyLoad\Model\Config::class
-        );
+        $this->config = $config;
     }
 
 
@@ -74,39 +71,46 @@ class BlockPlugin
             return $html;
         }
 
-        $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
-        $tmpSrc = 'TMP_SRC';
+        if ($this->config->getIsJavascriptLazyLoadMethod()) {
 
-        $html = str_replace($pixelSrc, $tmpSrc, $html);
+            $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
+            $tmpSrc = 'TMP_SRC';
 
-        $noscript = '';
-        if ($this->config->isNoScriptEnabled()) {
-            $noscript = '<noscript>
-                <img src="$2"  $1 $3  />
-            </noscript>';
-        }
+            $html = str_replace($pixelSrc, $tmpSrc, $html);
 
-        $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
-            ' data-original="$2" $1 $3/>
-           ' . $noscript, $html);
+            $noscript = '';
+            if ($this->config->isNoScriptEnabled()) {
+                $noscript = '<noscript>
+                    <img src="$2"  $1 $3  />
+                </noscript>';
+            }
 
-        $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
+            $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
+                ' data-original="$2" $1 $3/>
+               ' . $noscript, $html);
 
-        $html = str_replace($tmpSrc, $pixelSrc, $html);
-        $html = str_replace(self::LAZY_TAG, '', $html);
+            $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
 
-        /* Disable Owl Slider LazyLoad */
-        $html = str_replace(
-            ['"lazyLoad":true,', '&quot;lazyLoad&quot;:true,', 'owl-lazy'],
-            ['"lazyLoad":false,', '&quot;lazyLoad&quot;:false,', ''],
-            $html
-        );
+            $html = str_replace($tmpSrc, $pixelSrc, $html);
+            $html = str_replace(self::LAZY_TAG, '', $html);
 
-        /* Fix for page builder bg images */
-        if (false !== strpos($html, 'background-image-')) {
-            $html = str_replace('.background-image-', '.tmpbgimg-', $html);
-            $html = str_replace('background-image-', 'mflazy-background-image mflazy-background-image-', $html);
-            $html = str_replace('.tmpbgimg-', '.background-image-', $html);
+            /* Disable Owl Slider LazyLoad */
+            $html = str_replace(
+                ['"lazyLoad":true,', '&quot;lazyLoad&quot;:true,', 'owl-lazy'],
+                ['"lazyLoad":false,', '&quot;lazyLoad&quot;:false,', ''],
+                $html
+            );
+
+            /* Fix for page builder bg images */
+            if (false !== strpos($html, 'background-image-')) {
+                $html = str_replace('.background-image-', '.tmpbgimg-', $html);
+                $html = str_replace('background-image-', 'mflazy-background-image mflazy-background-image-', $html);
+                $html = str_replace('.tmpbgimg-', '.background-image-', $html);
+            }
+        } else {
+            $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
+                ' src="$2" $1 $3 loading="lazy" />
+               ', $html);
         }
 
         return $html;

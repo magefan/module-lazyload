@@ -6,6 +6,8 @@
  * Glory to Ukraine! Glory to the heroes!
  */
 
+declare(strict_types=1);
+
 namespace Magefan\LazyLoad\Plugin\Magefan\WebP\Model;
 
 use Magefan\LazyLoad\Model\Config;
@@ -27,7 +29,6 @@ class WebPPlugin
      */
     public function __construct(
         Config $config
-
     ) {
         $this->config = $config;
     }
@@ -41,7 +42,7 @@ class WebPPlugin
      */
     public function aroundGetPictureTagHtml($subject, callable $proceed, $imagePath, $image)
     {
-        if (!$this->config->getEnabled()) {
+        if (!$this->config->getEnabled() || !$this->config->getIsJavascriptLazyLoadMethod()) {
             return $proceed($imagePath, $image);
         }
 
