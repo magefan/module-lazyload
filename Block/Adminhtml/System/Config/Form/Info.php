@@ -21,7 +21,7 @@ class Info extends \Magefan\Community\Block\Adminhtml\System\Config\Form\Info
      */
     protected function getModuleUrl()
     {
-        return 'https://mage' . 'fan.com/magento2-extensions?utm_source=m2admin_lazyload_config&utm_medium=link&utm_campaign=regular';
+        return 'https://mage' . 'fan.com/magento-2-image-lazy-load-extension?utm_source=m2admin_lazyload_config&utm_medium=link&utm_campaign=regular';
     }
 
     /**
