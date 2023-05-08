@@ -95,14 +95,18 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 
             /* check if Plumrocket AMP enabled */
             if ($this->enabled) {
-                $isAmpRequest = $this->getConfig(self::XML_PATH_AMP_ENABLED);
-                if ($isAmpRequest) {
-                    /* We know that using objectManager is not a not a good practice,
+                /* We know that using objectManager is not a not a good practice,
                     but if Plumrocket_AMP is not installed on your magento instance
                     you'll get error during di:compile */
-                    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+                $isAmpRequest = $this->getConfig(self::XML_PATH_AMP_ENABLED);
+                if ($isAmpRequest) {
                     $isAmpRequest = $objectManager->get('\Plumrocket\Amp\Helper\Data')
                         ->isAmpRequest();
+                } else {
+                    $isAmpRequest = $objectManager->get(\Magento\Framework\App\RequestInterface::class)
+                        ->getParam('is_amp');
                 }
                 $this->enabled = !$isAmpRequest;
             }
