@@ -13,18 +13,21 @@
             <general>
                 <mfmodule>LazyLoad</mfmodule>
                 <mftype>1</mftype>
-                <lazy_blocks>footer
-category.products.list
-search_result_list
-catalog.product.related
-product.info.upsell
-product.info.details
-checkout.cart.crosssell
-blog.post
-blog.posts.list
-blog.sidebar
-blog.post.relatedproducts
-product.info.description
+                <lazy_blocks>
+                    {
+                    "_1658487871455_101":{"block":"footer","value":"0"},
+                    "_1658487871455_455":{"block":"category.products.list","value":"2"},
+                    "_1658490700442_442":{"block":"search_result_list","value":"0"},
+                    "_1658490704691_690":{"block":"catalog.product.related","value":"0"},
+                    "_1658490704691_691":{"block":"product.info.upsell","value":"0"},
+                    "_1658490704691_692":{"block":"product.info.details","value":"0"},
+                    "_1658732014810_810":{"block":"checkout.cart.crosssell","value":"0"},
+                    "_1658732073630_630":{"block":"blog.post","value":"0"},
+                    "_1658732178419_419":{"block":"blog.posts.list","value":"0"},
+                    "_1658732074295_295":{"block":"blog.sidebar","value":"0"},
+                    "_1658732097537_537":{"block":"blog.post.relatedproducts","value":"0"},
+                    "_1658732124744_743":{"block":"product.info.description","value":"0"}
+                    }
                 </lazy_blocks>
                 <method>0</method>
                 <noscript>0</noscript>

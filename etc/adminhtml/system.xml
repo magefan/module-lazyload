@@ -29,6 +29,8 @@
                 </field>
                 <field id="lazy_blocks" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label" type="textarea" canRestore="1">
                     <label>Lazy Load Blocks</label>
+                    <frontend_model>Magefan\LazyLoad\Block\Adminhtml\System\Config\Form\DynamicRow</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     <comment><![CDATA[
                         Lazy load functionality will be automatically applied to images inside this blocks. You can use block name, block PHP class, or .phtml template name. Please enter each name in a new line.<br/>
                         <strong>Example:</strong><br/>

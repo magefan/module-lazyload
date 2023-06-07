@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace Magefan\LazyLoad\Model;
 
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Serialize\SerializerInterface;
+
 /**
  * Lazy load config
  */
@@ -31,6 +34,24 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      * @var bool
      */
     protected $enabled;
+
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+    /**
+     * @param Context $context
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(
+        Context $context,
+        SerializerInterface $serializer
+    )
+    {
+        $this->serializer = $serializer;
+        parent::__construct($context);
+    }
 
     /**
      * Retrieve store config value
@@ -69,15 +90,19 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBlocks(): array
     {
         if (null === $this->blocks) {
-            $blocks = $this->getConfig(self::XML_PATH_LAZY_BLOCKS);
+            try {
+                $blocks = $this->serializer->unserialize($this->getConfig(self::XML_PATH_LAZY_BLOCKS));
+            }
+            catch (\InvalidArgumentException $e) {
+                return [];
+            }
 
-            $blocks = str_replace(["\r\n", "\n'\r", "\n"], "\r", $blocks);
-            $blocks = explode("\r", $blocks);
-            $this->blocks = [];
-            foreach ($blocks as $block) {
-                if ($block = trim($block)) {
-                    $this->blocks[] = $block;
+            foreach ($blocks as $blockData) {
+                if (!isset($blockData['block']) || !isset($blockData['skipNElements'])) {
+                    continue;
                 }
+
+                $this->blocks[$blockData['block']] = $blockData['skipNElements'];
             }
         }
 

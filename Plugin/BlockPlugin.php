@@ -19,6 +19,8 @@ class BlockPlugin
 {
     const LAZY_TAG = '<!-- MAGEFAN_LAZY_LOAD -->';
 
+    const CUSTOM_LABEL = 'mf-lazy';
+
     /**
      * Request
      * @var \Magento\Framework\App\RequestInterface
@@ -43,6 +45,11 @@ class BlockPlugin
      * @var \Magefan\LazyLoad\Model\Config
      */
     protected $config;
+
+    /**
+     * @var array
+     */
+    protected $labelsValues = [];
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
@@ -71,8 +78,14 @@ class BlockPlugin
             return $html;
         }
 
-        if ($this->config->getIsJavascriptLazyLoadMethod()) {
+        $blockName = $block->getBlockId() ?: $block->getNameInLayout();
+        $numberOfReplacements = (int)($this->config->getBlocks()[$blockName] ?? 0);
 
+        if ($numberOfReplacements) {
+            $html = $this->removeFirstNImagesWithCustomLabel($html, $numberOfReplacements);
+        }
+
+        if ($this->config->getIsJavascriptLazyLoadMethod()) {
             $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
             $tmpSrc = 'TMP_SRC';
 
@@ -113,7 +126,41 @@ class BlockPlugin
                ', $html);
         }
 
+        if ($numberOfReplacements) {
+            return $this->revertFirstNImageToInital($html);
+        }
+
         return $html;
+    }
+
+    /**
+     * @param $html
+     * @param int $numberOfReplacements
+     * @return array|string|string[]|null
+     */
+    protected function removeFirstNImagesWithCustomLabel($html, int $numberOfReplacements) {
+        $count = 0;
+        return preg_replace_callback('#<img([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', function ($match) use (&$count, &$numberOfReplacements) {
+            $count++;
+            if ($count <= $numberOfReplacements) {
+                $label = self::CUSTOM_LABEL . '_' . $count;
+                $this->labelsValues[$label] = $match[0];
+
+                return $label;
+            }
+
+            return $match[0];
+        }, $html, $numberOfReplacements);
+    }
+
+    /**
+     * @param $html
+     * @return array|string|string[]|null
+     */
+    protected function revertFirstNImageToInital($html) {
+        return preg_replace_callback('/' . self::CUSTOM_LABEL .'_\d+\b(.*?)/', function($match) use (&$count) {
+            return $this->labelsValues[$match[0]] ?? $match[0];
+        }, $html);
     }
 
     /**
@@ -141,7 +188,7 @@ class BlockPlugin
         $blockTemplate = $block->getTemplate();
         $blocks = $this->config->getBlocks();
 
-        if (!in_array($blockName, $blocks)
+        if (!in_array($blockName, array_keys($blocks))
             && !in_array(get_class($block), $blocks)
             && !in_array($blockTemplate, $blocks)
             && (false === strpos($html, self::LAZY_TAG))
