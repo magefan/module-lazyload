@@ -127,7 +127,8 @@ class BlockPlugin
         }
 
         if ($numberOfReplacements) {
-            return $this->revertFirstNImageToInital($html);
+            $html = $this->revertFirstNImageToInital($html);
+            return $this->deleteFirstNLoadingLazy($html, $numberOfReplacements);
         }
 
         return $html;
@@ -161,6 +162,15 @@ class BlockPlugin
         return preg_replace_callback('/' . self::CUSTOM_LABEL .'_\d+\b(.*?)/', function($match) use (&$count) {
             return $this->labelsValues[$match[0]] ?? $match[0];
         }, $html);
+    }
+
+    /**
+     * @param $html
+     * @param int $numberOfDeletions
+     * @return array|string|string[]|null
+     */
+    protected function deleteFirstNLoadingLazy($html,int $numberOfDeletions) {
+        return preg_replace('/loading="lazy"/', '', $html, $numberOfDeletions, $count);
     }
 
     /**
