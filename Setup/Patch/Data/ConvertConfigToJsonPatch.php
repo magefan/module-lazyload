@@ -73,8 +73,10 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
         $this->moduleDataSetup->startSetup();
 
         $connection = $this->moduleDataSetup->getConnection();
+        $tableName = $this->moduleDataSetup->getTable('core_config_data');
+
         $query = $connection->select()
-            ->from($this->moduleDataSetup->getTable('core_config_data'), ['config_id','value'])
+            ->from($tableName, ['config_id','value'])
             ->where(
                 'path = ?',
                 Config::XML_PATH_LAZY_BLOCKS
@@ -83,7 +85,6 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
 
         $result = $connection->fetchAll($query);
 
-        $tableName = $this->moduleDataSetup->getTable('core_config_data');
         foreach ($result as $scope) {
             if (!isset($scope['config_id']) || !isset($scope['value'])) {
                 continue;
