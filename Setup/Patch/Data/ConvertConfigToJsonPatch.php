@@ -94,7 +94,7 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
                 continue;
             }
 
-            $jsonBlocks = $this->getJsonFroBlocks($blocks);
+            $jsonBlocks = $this->getJsonForBlocks($blocks);
 
             try {
                 $connection->update(
@@ -117,7 +117,7 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
      * @param $blocks
      * @return bool|string
      */
-    protected function getJsonFroBlocks($blocks) {
+    protected function getJsonForBlocks($blocks) {
         $arrayBlocks = [];
         $counter = 1;
         foreach ($blocks as $block) {
