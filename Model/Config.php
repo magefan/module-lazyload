@@ -98,11 +98,11 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
             }
 
             foreach ($blocks as $blockData) {
-                if (!isset($blockData['block']) || !isset($blockData['skipNElements'])) {
+                if (!isset($blockData['block_identifier']) || !isset($blockData['first_images_to_skip'])) {
                     continue;
                 }
 
-                $this->blocks[$blockData['block']] = $blockData['skipNElements'];
+                $this->blocks[$blockData['block_identifier']] = $blockData['first_images_to_skip'];
             }
         }
 

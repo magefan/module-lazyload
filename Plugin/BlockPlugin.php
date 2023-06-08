@@ -19,7 +19,7 @@ class BlockPlugin
 {
     const LAZY_TAG = '<!-- MAGEFAN_LAZY_LOAD -->';
 
-    const CUSTOM_LABEL = 'mf-lazy';
+    const REPLACEMENT_LABEL = 'mf-lazy';
 
     /**
      * Request
@@ -144,7 +144,7 @@ class BlockPlugin
         return preg_replace_callback('#<img([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', function ($match) use (&$count, &$numberOfReplacements) {
             $count++;
             if ($count <= $numberOfReplacements) {
-                $label = self::CUSTOM_LABEL . '_' . $count;
+                $label = self::REPLACEMENT_LABEL . '_' . $count;
                 $this->labelsValues[$label] = $match[0];
 
                 return $label;
@@ -159,7 +159,7 @@ class BlockPlugin
      * @return array|string|string[]|null
      */
     protected function revertFirstNImageToInital($html) {
-        return preg_replace_callback('/' . self::CUSTOM_LABEL .'_\d+\b(.*?)/', function($match) use (&$count) {
+        return preg_replace_callback('/' . self::REPLACEMENT_LABEL .'_\d+\b(.*?)/', function($match) use (&$count) {
             return $this->labelsValues[$match[0]] ?? $match[0];
         }, $html);
     }

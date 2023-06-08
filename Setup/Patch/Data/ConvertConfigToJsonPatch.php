@@ -15,6 +15,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magefan\LazyLoad\Model\Config as Config;
 use Magento\Config\Model\ResourceModel\Config as Resource;
 use Magento\Framework\Serialize\SerializerInterface;
+use Psr\Log\LoggerInterface;
 
 class ConvertConfigToJsonPatch implements DataPatchInterface
 {
@@ -39,21 +40,29 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
     private $serializer;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param Config $config
      * @param Resource $resource
      * @param SerializerInterface $serializer
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
         Config $config,
         Resource $resource,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        LoggerInterface $logger
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->config = $config;
         $this->resource = $resource;
         $this->serializer = $serializer;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,26 +72,51 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
     {
         $this->moduleDataSetup->startSetup();
 
-        $blocks = $this->getBlocks();
-        if (empty($blocks)) {
+        $scopes = $this->getScopes();
+        if (empty($scopes)) {
             $this->moduleDataSetup->endSetup();
             return;
         }
 
+        $connection = $this->moduleDataSetup->getConnection();
+        $tableName = $this->moduleDataSetup->getTable('core_config_data');
+
+        foreach ($scopes as $scopeId => $blocks) {
+            $jsonBlocks = $this->getJsonFroBlocks($blocks);
+
+            try {
+                $connection->update(
+                    $tableName,
+                    ['value' => $jsonBlocks],
+                    [
+                        'scope_id = ?' => $scopeId,
+                        'path = ?' => Config::XML_PATH_LAZY_BLOCKS,
+                    ],
+                );
+            } catch (\Exception $e) {
+                $this->logger->debug(__('Magefan LazyLoad ERROR: while converting to json for scope_id: ') . $scopeId);
+                continue;
+            }
+        }
+
+        $this->moduleDataSetup->endSetup();
+    }
+
+    /**
+     * @param $blocks
+     * @return bool|string
+     */
+    protected function getJsonFroBlocks($blocks) {
         $arrayBlocks = [];
         foreach ($blocks as $block) {
             $arrayBlocks[$this->getNumberHashForBlock($block)] =
                 [
-                    'block' => $block,
-                    'skipNElements' => $this->getSkipNelementsNumber($block)
+                    'block_identifier' => $block,
+                    'first_images_to_skip' => $this->getSkipNelementsNumber($block)
                 ];
         }
 
-        $jsonBlocks = $this->serializer->serialize($arrayBlocks);
-
-        $this->resource->saveConfig(Config::XML_PATH_LAZY_BLOCKS, $jsonBlocks);
-
-        $this->moduleDataSetup->endSetup();
+        return $this->serializer->serialize($arrayBlocks);
     }
 
     /**
@@ -128,9 +162,38 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
      * Retrieve alloved blocks info
      * @return array
      */
-    protected function getBlocks(): array
+    protected function getScopes(): array
     {
-        $blocks = $this->config->getConfig(Config::XML_PATH_LAZY_BLOCKS);
+        $connection = $this->moduleDataSetup->getConnection();
+        $query = $connection->select()
+            ->from($this->moduleDataSetup->getTable('core_config_data'), ['scope_id','value'])
+            ->where(
+                'path = ?',
+                Config::XML_PATH_LAZY_BLOCKS
+            )
+            ->order('scope_id ASC');
+
+        $result = $connection->fetchAll($query);
+        $scopes = [];
+        foreach ($result as $scope) {
+            if (!isset($scope['scope_id']) || !isset($scope['value'])) {
+                continue;
+            }
+
+            $blocks = $this->getBlocks($scope['value']);
+            if (!empty($blocks)) {
+                $scopes[$scope['scope_id']] = $blocks;
+            }
+        }
+
+        return $scopes;
+    }
+
+    /**
+     * @param $blocks
+     * @return array
+     */
+    protected function getBlocks ($blocks): array {
         json_decode($blocks);
         if (json_last_error() === JSON_ERROR_NONE) {
             return [];
