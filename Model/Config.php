@@ -89,6 +89,21 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBlocks(): array
     {
+        return array_keys($this->getBlocksInfo());
+    }
+
+    /**
+     * @param $blockIdentifier
+     * @return int
+     */
+    public function getBlockFirstImagesToSkip($blockIdentifier): int {
+        return (int)($this->getBlocksInfo()[$blockIdentifier] ?? 0);
+    }
+
+    /**
+     * @return array
+     */
+    public function getBlocksInfo(): array {
         if (null === $this->blocks) {
             try {
                 $blocks = $this->serializer->unserialize($this->getConfig(self::XML_PATH_LAZY_BLOCKS));

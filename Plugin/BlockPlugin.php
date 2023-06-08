@@ -78,8 +78,8 @@ class BlockPlugin
             return $html;
         }
 
-        $blockName = $block->getBlockId() ?: $block->getNameInLayout();
-        $numberOfReplacements = (int)($this->config->getBlocks()[$blockName] ?? 0);
+        $blockIdentifier = $this->getBlockIdentifier($block);
+        $numberOfReplacements = $this->config->getBlockFirstImagesToSkip($blockIdentifier);
 
         if ($numberOfReplacements) {
             $html = $this->removeFirstNImagesWithCustomLabel($html, $numberOfReplacements);
@@ -132,6 +132,28 @@ class BlockPlugin
         }
 
         return $html;
+    }
+
+    /**
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
+     * @return string
+     */
+    protected function getBlockIdentifier(\Magento\Framework\View\Element\AbstractBlock $block): string {
+        $blockName = $block->getBlockId() ?: $block->getNameInLayout();
+        $blockTemplate = $block->getTemplate();
+        $blocks = $this->config->getBlocks();
+
+        if (in_array($blockName, $blocks)) {
+            return $blockName;
+        }
+        else if (in_array(get_class($block), $blocks)) {
+            return get_class($block);
+        }
+        else if (in_array($blockTemplate, $blocks)) {
+            return $blockTemplate;
+        }
+
+        return '';
     }
 
     /**
@@ -198,7 +220,7 @@ class BlockPlugin
         $blockTemplate = $block->getTemplate();
         $blocks = $this->config->getBlocks();
 
-        if (!in_array($blockName, array_keys($blocks))
+        if (!in_array($blockName, $blocks)
             && !in_array(get_class($block), $blocks)
             && !in_array($blockTemplate, $blocks)
             && (false === strpos($html, self::LAZY_TAG))

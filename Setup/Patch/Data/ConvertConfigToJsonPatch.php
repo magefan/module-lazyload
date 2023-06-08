@@ -72,16 +72,28 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
     {
         $this->moduleDataSetup->startSetup();
 
-        $scopes = $this->getScopes();
-        if (empty($scopes)) {
-            $this->moduleDataSetup->endSetup();
-            return;
-        }
-
         $connection = $this->moduleDataSetup->getConnection();
-        $tableName = $this->moduleDataSetup->getTable('core_config_data');
+        $query = $connection->select()
+            ->from($this->moduleDataSetup->getTable('core_config_data'), ['config_id','value'])
+            ->where(
+                'path = ?',
+                Config::XML_PATH_LAZY_BLOCKS
+            )
+            ->order('config_id ASC');
 
-        foreach ($scopes as $scopeId => $blocks) {
+        $result = $connection->fetchAll($query);
+
+        $tableName = $this->moduleDataSetup->getTable('core_config_data');
+        foreach ($result as $scope) {
+            if (!isset($scope['config_id']) || !isset($scope['value'])) {
+                continue;
+            }
+
+            $blocks = $this->getBlocks($scope['value']);
+            if (empty($blocks)) {
+                continue;
+            }
+
             $jsonBlocks = $this->getJsonFroBlocks($blocks);
 
             try {
@@ -89,12 +101,11 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
                     $tableName,
                     ['value' => $jsonBlocks],
                     [
-                        'scope_id = ?' => $scopeId,
-                        'path = ?' => Config::XML_PATH_LAZY_BLOCKS,
+                        'config_id = ?' => $scope['config_id']
                     ],
                 );
             } catch (\Exception $e) {
-                $this->logger->debug(__('Magefan LazyLoad ERROR: while converting to json for scope_id: ') . $scopeId);
+                $this->logger->debug(__('Magefan LazyLoad ERROR: while converting to json for config_id: ') . $scope['config_id']);
                 continue;
             }
         }
@@ -108,12 +119,15 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
      */
     protected function getJsonFroBlocks($blocks) {
         $arrayBlocks = [];
+        $counter = 1;
         foreach ($blocks as $block) {
-            $arrayBlocks[$this->getNumberHashForBlock($block)] =
+            $arrayBlocks[(string)$counter] =
                 [
                     'block_identifier' => $block,
-                    'first_images_to_skip' => $this->getSkipNelementsNumber($block)
+                    'first_images_to_skip' => ($block == 'category.products.list') ? '2' : '0'
                 ];
+
+            $counter++;
         }
 
         return $this->serializer->serialize($arrayBlocks);
@@ -133,60 +147,6 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
     public function getAliases()
     {
         return [];
-    }
-
-    /**
-     * @param $block
-     * @return string
-     */
-    protected function getSkipNelementsNumber($block): string {
-        if ('category.products.list' == $block) {
-            return '2';
-        }
-
-        return '0';
-    }
-
-    /**
-     * @param $block
-     * @return string
-     */
-    protected function getNumberHashForBlock ($block): string {
-        $numberHashFromString = sprintf('%u', crc32($block));
-        $numberHashFromStringSuffix = substr($numberHashFromString, -3);
-
-        return '_' . $numberHashFromString . $numberHashFromStringSuffix . '_' . $numberHashFromStringSuffix;
-    }
-
-    /**
-     * Retrieve alloved blocks info
-     * @return array
-     */
-    protected function getScopes(): array
-    {
-        $connection = $this->moduleDataSetup->getConnection();
-        $query = $connection->select()
-            ->from($this->moduleDataSetup->getTable('core_config_data'), ['scope_id','value'])
-            ->where(
-                'path = ?',
-                Config::XML_PATH_LAZY_BLOCKS
-            )
-            ->order('scope_id ASC');
-
-        $result = $connection->fetchAll($query);
-        $scopes = [];
-        foreach ($result as $scope) {
-            if (!isset($scope['scope_id']) || !isset($scope['value'])) {
-                continue;
-            }
-
-            $blocks = $this->getBlocks($scope['value']);
-            if (!empty($blocks)) {
-                $scopes[$scope['scope_id']] = $blocks;
-            }
-        }
-
-        return $scopes;
     }
 
     /**

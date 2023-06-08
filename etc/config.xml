@@ -15,18 +15,18 @@
                 <mftype>1</mftype>
                 <lazy_blocks>
                     {
-                    "_1658487871455_101":{"block_identifier":"footer","first_images_to_skip":"0"},
-                    "_1658487871455_455":{"block_identifier":"category.products.list","first_images_to_skip":"2"},
-                    "_1658490700442_442":{"block_identifier":"search_result_list","first_images_to_skip":"0"},
-                    "_1658490704691_690":{"block_identifier":"catalog.product.related","first_images_to_skip":"0"},
-                    "_1658490704691_691":{"block_identifier":"product.info.upsell","first_images_to_skip":"0"},
-                    "_1658490704691_692":{"block_identifier":"product.info.details","first_images_to_skip":"0"},
-                    "_1658732014810_810":{"block_identifier":"checkout.cart.crosssell","first_images_to_skip":"0"},
-                    "_1658732073630_630":{"block_identifier":"blog.post","first_images_to_skip":"0"},
-                    "_1658732178419_419":{"block_identifier":"blog.posts.list","first_images_to_skip":"0"},
-                    "_1658732074295_295":{"block_identifier":"blog.sidebar","first_images_to_skip":"0"},
-                    "_1658732097537_537":{"block_identifier":"blog.post.relatedproducts","first_images_to_skip":"0"},
-                    "_1658732124744_743":{"block_identifier":"product.info.description","first_images_to_skip":"0"}
+                    "1":{"block_identifier":"footer","first_images_to_skip":"0"},
+                    "2":{"block_identifier":"category.products.list","first_images_to_skip":"2"},
+                    "3":{"block_identifier":"search_result_list","first_images_to_skip":"0"},
+                    "4":{"block_identifier":"catalog.product.related","first_images_to_skip":"0"},
+                    "5":{"block_identifier":"product.info.upsell","first_images_to_skip":"0"},
+                    "6":{"block_identifier":"product.info.details","first_images_to_skip":"0"},
+                    "7":{"block_identifier":"checkout.cart.crosssell","first_images_to_skip":"0"},
+                    "8":{"block_identifier":"blog.post","first_images_to_skip":"0"},
+                    "9":{"block_identifier":"blog.posts.list","first_images_to_skip":"0"},
+                    "10":{"block_identifier":"blog.sidebar","first_images_to_skip":"0"},
+                    "11":{"block_identifier":"blog.post.relatedproducts","first_images_to_skip":"0"},
+                    "12":{"block_identifier":"product.info.description","first_images_to_skip":"0"}
                     }
                 </lazy_blocks>
                 <method>0</method>
