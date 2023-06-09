@@ -78,14 +78,16 @@ class BlockPlugin
             return $html;
         }
 
-        $blockIdentifier = $this->getBlockIdentifier($block);
-        $numberOfReplacements = $this->config->getBlockFirstImagesToSkip($blockIdentifier);
-
-        if ($numberOfReplacements) {
-            $html = $this->removeFirstNImagesWithCustomLabel($html, $numberOfReplacements);
-        }
-
         if ($this->config->getIsJavascriptLazyLoadMethod()) {
+
+            $numberOfReplacements = $this->config->getBlockFirstImagesToSkip(
+                $this->getBlockIdentifier($block)
+            );
+
+            if ($numberOfReplacements) {
+                $html = $this->removeFirstNImagesWithCustomLabel($html, $numberOfReplacements);
+            }
+
             $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
             $tmpSrc = 'TMP_SRC';
 
@@ -120,15 +122,14 @@ class BlockPlugin
                 $html = str_replace('background-image-', 'mflazy-background-image mflazy-background-image-', $html);
                 $html = str_replace('.tmpbgimg-', '.background-image-', $html);
             }
+
+            if ($numberOfReplacements) {
+                $html = $this->revertFirstNImageToInital($html);
+            }
         } else {
             $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
                 ' src="$2" $1 $3 loading="lazy" />
                ', $html);
-        }
-
-        if ($numberOfReplacements) {
-            $html = $this->revertFirstNImageToInital($html);
-            return $this->deleteFirstNLoadingLazy($html, $numberOfReplacements);
         }
 
         return $html;
@@ -138,18 +139,17 @@ class BlockPlugin
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return string
      */
-    protected function getBlockIdentifier(\Magento\Framework\View\Element\AbstractBlock $block): string {
+    protected function getBlockIdentifier(\Magento\Framework\View\Element\AbstractBlock $block): string
+    {
         $blockName = $block->getBlockId() ?: $block->getNameInLayout();
         $blockTemplate = $block->getTemplate();
         $blocks = $this->config->getBlocks();
 
         if (in_array($blockName, $blocks)) {
             return $blockName;
-        }
-        else if (in_array(get_class($block), $blocks)) {
+        } elseif (in_array(get_class($block), $blocks)) {
             return get_class($block);
-        }
-        else if (in_array($blockTemplate, $blocks)) {
+        } elseif (in_array($blockTemplate, $blocks)) {
             return $blockTemplate;
         }
 
@@ -161,7 +161,8 @@ class BlockPlugin
      * @param int $numberOfReplacements
      * @return array|string|string[]|null
      */
-    protected function removeFirstNImagesWithCustomLabel($html, int $numberOfReplacements) {
+    protected function removeFirstNImagesWithCustomLabel($html, int $numberOfReplacements)
+    {
         $count = 0;
         return preg_replace_callback('#<img([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', function ($match) use (&$count, &$numberOfReplacements) {
             $count++;
@@ -180,19 +181,11 @@ class BlockPlugin
      * @param $html
      * @return array|string|string[]|null
      */
-    protected function revertFirstNImageToInital($html) {
-        return preg_replace_callback('/' . self::REPLACEMENT_LABEL .'_\d+\b(.*?)/', function($match) use (&$count) {
+    protected function revertFirstNImageToInital($html)
+    {
+        return preg_replace_callback('/' . self::REPLACEMENT_LABEL .'_\d+\b(.*?)/', function ($match) use (&$count) {
             return $this->labelsValues[$match[0]] ?? $match[0];
         }, $html);
-    }
-
-    /**
-     * @param $html
-     * @param int $numberOfDeletions
-     * @return array|string|string[]|null
-     */
-    protected function deleteFirstNLoadingLazy($html,int $numberOfDeletions) {
-        return preg_replace('/loading="lazy"/', '', $html, $numberOfDeletions, $count);
     }
 
     /**
@@ -216,15 +209,11 @@ class BlockPlugin
             return false;
         }
 
-        $blockName = $block->getBlockId() ?: $block->getNameInLayout();
-        $blockTemplate = $block->getTemplate();
-        $blocks = $this->config->getBlocks();
+        if (false !== strpos($html, self::LAZY_TAG)) {
+            return true;
+        }
 
-        if (!in_array($blockName, $blocks)
-            && !in_array(get_class($block), $blocks)
-            && !in_array($blockTemplate, $blocks)
-            && (false === strpos($html, self::LAZY_TAG))
-        ) {
+        if (!$this->getBlockIdentifier($block)) {
             return false;
         }
 

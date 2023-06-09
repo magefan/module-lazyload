@@ -47,8 +47,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         Context $context,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->serializer = $serializer;
         parent::__construct($context);
     }
@@ -96,19 +95,25 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      * @param $blockIdentifier
      * @return int
      */
-    public function getBlockFirstImagesToSkip($blockIdentifier): int {
-        return (int)($this->getBlocksInfo()[$blockIdentifier] ?? 0);
+    public function getBlockFirstImagesToSkip($blockIdentifier): int
+    {
+        $blockInfo = $this->getBlocksInfo();
+        if (isset($blockInfo[$blockIdentifier])) {
+            return (int)$blockInfo[$blockIdentifier];
+        }
+
+        return 0;
     }
 
     /**
      * @return array
      */
-    public function getBlocksInfo(): array {
+    public function getBlocksInfo(): array
+    {
         if (null === $this->blocks) {
             try {
                 $blocks = $this->serializer->unserialize($this->getConfig(self::XML_PATH_LAZY_BLOCKS));
-            }
-            catch (\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException $e) {
                 return [];
             }
 

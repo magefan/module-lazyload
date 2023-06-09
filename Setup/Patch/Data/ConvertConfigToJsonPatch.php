@@ -118,7 +118,8 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
      * @param $blocks
      * @return bool|string
      */
-    protected function getJsonForBlocks($blocks) {
+    protected function getJsonForBlocks($blocks)
+    {
         $arrayBlocks = [];
         $counter = 1;
         foreach ($blocks as $block) {
@@ -154,13 +155,14 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
      * @param $blocks
      * @return array
      */
-    protected function getBlocks ($blocks): array {
+    protected function getBlocks($blocks): array
+    {
         json_decode($blocks);
         if (json_last_error() === JSON_ERROR_NONE) {
             return [];
         }
 
-        $blocks = str_replace(["\r\n", "\n'\r", "\n"], "\r", $blocks);
+        $blocks = str_replace(["\r\n", "\n\r", "\n"], "\r", $blocks);
         $blocks = explode("\r", $blocks);
         $result = [];
         foreach ($blocks as $block) {
