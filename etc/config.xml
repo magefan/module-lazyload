@@ -13,18 +13,21 @@
             <general>
                 <mfmodule>LazyLoad</mfmodule>
                 <mftype>1</mftype>
-                <lazy_blocks>footer
-category.products.list
-search_result_list
-catalog.product.related
-product.info.upsell
-product.info.details
-checkout.cart.crosssell
-blog.post
-blog.posts.list
-blog.sidebar
-blog.post.relatedproducts
-product.info.description
+                <lazy_blocks>
+                    {
+                    "1":{"block_identifier":"footer","first_images_to_skip":"0"},
+                    "2":{"block_identifier":"category.products.list","first_images_to_skip":"2"},
+                    "3":{"block_identifier":"search_result_list","first_images_to_skip":"0"},
+                    "4":{"block_identifier":"catalog.product.related","first_images_to_skip":"0"},
+                    "5":{"block_identifier":"product.info.upsell","first_images_to_skip":"0"},
+                    "6":{"block_identifier":"product.info.details","first_images_to_skip":"0"},
+                    "7":{"block_identifier":"checkout.cart.crosssell","first_images_to_skip":"0"},
+                    "8":{"block_identifier":"blog.post","first_images_to_skip":"0"},
+                    "9":{"block_identifier":"blog.posts.list","first_images_to_skip":"0"},
+                    "10":{"block_identifier":"blog.sidebar","first_images_to_skip":"0"},
+                    "11":{"block_identifier":"blog.post.relatedproducts","first_images_to_skip":"0"},
+                    "12":{"block_identifier":"product.info.description","first_images_to_skip":"0"}
+                    }
                 </lazy_blocks>
                 <method>0</method>
                 <noscript>0</noscript>

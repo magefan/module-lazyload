@@ -19,6 +19,8 @@ class BlockPlugin
 {
     const LAZY_TAG = '<!-- MAGEFAN_LAZY_LOAD -->';
 
+    const REPLACEMENT_LABEL = 'mf-lazy';
+
     /**
      * Request
      * @var \Magento\Framework\App\RequestInterface
@@ -43,6 +45,11 @@ class BlockPlugin
      * @var \Magefan\LazyLoad\Model\Config
      */
     protected $config;
+
+    /**
+     * @var array
+     */
+    protected $labelsValues = [];
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
@@ -71,8 +78,14 @@ class BlockPlugin
             return $html;
         }
 
-        if ($this->config->getIsJavascriptLazyLoadMethod()) {
+        $blockIdentifier = $this->getBlockIdentifier($block);
+        $numberOfReplacements = $this->config->getBlockFirstImagesToSkip($blockIdentifier);
 
+        if ($numberOfReplacements) {
+            $html = $this->removeFirstNImagesWithCustomLabel($html, $numberOfReplacements);
+        }
+
+        if ($this->config->getIsJavascriptLazyLoadMethod()) {
             $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
             $tmpSrc = 'TMP_SRC';
 
@@ -113,7 +126,73 @@ class BlockPlugin
                ', $html);
         }
 
+        if ($numberOfReplacements) {
+            $html = $this->revertFirstNImageToInital($html);
+            return $this->deleteFirstNLoadingLazy($html, $numberOfReplacements);
+        }
+
         return $html;
+    }
+
+    /**
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
+     * @return string
+     */
+    protected function getBlockIdentifier(\Magento\Framework\View\Element\AbstractBlock $block): string {
+        $blockName = $block->getBlockId() ?: $block->getNameInLayout();
+        $blockTemplate = $block->getTemplate();
+        $blocks = $this->config->getBlocks();
+
+        if (in_array($blockName, $blocks)) {
+            return $blockName;
+        }
+        else if (in_array(get_class($block), $blocks)) {
+            return get_class($block);
+        }
+        else if (in_array($blockTemplate, $blocks)) {
+            return $blockTemplate;
+        }
+
+        return '';
+    }
+
+    /**
+     * @param $html
+     * @param int $numberOfReplacements
+     * @return array|string|string[]|null
+     */
+    protected function removeFirstNImagesWithCustomLabel($html, int $numberOfReplacements) {
+        $count = 0;
+        return preg_replace_callback('#<img([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', function ($match) use (&$count, &$numberOfReplacements) {
+            $count++;
+            if ($count <= $numberOfReplacements) {
+                $label = self::REPLACEMENT_LABEL . '_' . $count;
+                $this->labelsValues[$label] = $match[0];
+
+                return $label;
+            }
+
+            return $match[0];
+        }, $html, $numberOfReplacements);
+    }
+
+    /**
+     * @param $html
+     * @return array|string|string[]|null
+     */
+    protected function revertFirstNImageToInital($html) {
+        return preg_replace_callback('/' . self::REPLACEMENT_LABEL .'_\d+\b(.*?)/', function($match) use (&$count) {
+            return $this->labelsValues[$match[0]] ?? $match[0];
+        }, $html);
+    }
+
+    /**
+     * @param $html
+     * @param int $numberOfDeletions
+     * @return array|string|string[]|null
+     */
+    protected function deleteFirstNLoadingLazy($html,int $numberOfDeletions) {
+        return preg_replace('/loading="lazy"/', '', $html, $numberOfDeletions, $count);
     }
 
     /**
