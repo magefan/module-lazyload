@@ -103,7 +103,7 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
                     ['value' => $jsonBlocks],
                     [
                         'config_id = ?' => $scope['config_id']
-                    ],
+                    ]
                 );
             } catch (\Exception $e) {
                 $this->logger->debug(__('Magefan LazyLoad ERROR: while converting to json for config_id: ') . $scope['config_id']);
