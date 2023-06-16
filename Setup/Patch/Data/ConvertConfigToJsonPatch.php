@@ -115,21 +115,29 @@ class ConvertConfigToJsonPatch implements DataPatchInterface
     }
 
     /**
+     * @param $block
+     * @return string
+     */
+    protected function getNumberHashForBlock ($block): string {
+        $numberHashFromString = sprintf('%u', crc32($block));
+        $numberHashFromStringSuffix = substr($numberHashFromString, -3);
+
+        return '_' . $numberHashFromString . $numberHashFromStringSuffix . '_' . $numberHashFromStringSuffix;
+    }
+
+    /**
      * @param $blocks
      * @return bool|string
      */
     protected function getJsonForBlocks($blocks)
     {
         $arrayBlocks = [];
-        $counter = 1;
         foreach ($blocks as $block) {
-            $arrayBlocks[(string)$counter] =
+            $arrayBlocks[$this->getNumberHashForBlock($block)] =
                 [
                     'block_identifier' => $block,
                     'first_images_to_skip' => ($block == 'category.products.list') ? '2' : '0'
                 ];
-
-            $counter++;
         }
 
         return $this->serializer->serialize($arrayBlocks);
