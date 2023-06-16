@@ -111,10 +111,12 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBlocksInfo(): array
     {
         if (null === $this->blocks) {
+            $this->blocks = [];
+            
             try {
                 $blocks = $this->serializer->unserialize($this->getConfig(self::XML_PATH_LAZY_BLOCKS));
             } catch (\InvalidArgumentException $e) {
-                return [];
+                return $this->blocks;
             }
 
             foreach ($blocks as $blockData) {
@@ -124,8 +126,6 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
 
                 $this->blocks[$blockData['block_identifier']] = $blockData['first_images_to_skip'];
             }
-            
-            $this->blocks = null !== $this->blocks ?: [];
         }
 
         return $this->blocks;
