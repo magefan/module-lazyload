@@ -100,9 +100,11 @@ class BlockPlugin
                 </noscript>';
             }
 
-            $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
-                ' data-original="$2" $1 $3/>
-               ' . $noscript, $html);
+            $html = preg_replace(
+                '#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU',
+                '<img data-original="$2" $1 $3/>' . $noscript, 
+                $html
+            );
 
             $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
 
@@ -127,9 +129,11 @@ class BlockPlugin
                 $html = $this->revertFirstNImageToInital($html);
             }
         } else {
-            $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
-                ' src="$2" $1 $3 loading="lazy" />
-               ', $html);
+            $html = preg_replace(
+                '#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', 
+                '<img src="$2" $1 $3 loading="lazy" />',
+                $html
+            );
         }
 
         return $html;
