@@ -74,7 +74,7 @@ class BlockPlugin
      */
     public function afterToHtml(\Magento\Framework\View\Element\AbstractBlock $block, $html)
     {
-        if (!$this->isEnabled($block, (string)$html)) {
+        if (!$html || !$this->isEnabled($block, (string)$html)) {
             return $html;
         }
 
@@ -100,9 +100,11 @@ class BlockPlugin
                 </noscript>';
             }
 
-            $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
-                ' data-original="$2" $1 $3/>
-               ' . $noscript, $html);
+            $html = preg_replace(
+                '#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU',
+                '<img data-original="$2" $1 $3/>' . $noscript,
+                $html
+            );
 
             $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
 
@@ -207,6 +209,10 @@ class BlockPlugin
 
         if (!$this->config->getEnabled()) {
             return false;
+        }
+
+        if ($this->config->getIsAllBlocksAddedToLazy()) {
+            return true;
         }
 
         if (false !== strpos($html, self::LAZY_TAG)) {

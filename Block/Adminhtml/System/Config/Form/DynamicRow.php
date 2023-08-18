@@ -19,8 +19,8 @@ class DynamicRow extends AbstractFieldArray
      */
     protected function _prepareToRender()
     {
-        $this->addColumn('block_identifier', ['label' => __('Block Identifier'), 'style' => 'width:170px']);
-        $this->addColumn('first_images_to_skip', ['label' => __('First Images To Skip'), 'style' => 'width:170px']);
+        $this->addColumn('block_identifier', ['label' => __('Block Identifier'), 'style' => 'width:350px']);
+        $this->addColumn('first_images_to_skip', ['label' => __('First Images To Skip'), 'style' => 'width:70px']);
         $this->_addAfter = false;
         $this->_addButtonLabel = __('Add');
     }

@@ -9,32 +9,20 @@ declare(strict_types=1);
 
 namespace Magefan\LazyLoad\Model\Config\Source;
 
-/**
- * Comment statuses
- */
-class Method implements \Magento\Framework\Option\ArrayInterface
+class BlocksToLazyLoad implements \Magento\Framework\Option\ArrayInterface
 {
-    /**
-     * @const string
-     */
-    const JAVASCRIPT = 0;
+
+    const ALL = 0;
+    const SELECTED = 1;
 
     /**
-     * @const int
-     */
-    const NATIVE = 1;
-
-
-    /**
-     * Options int
-     *
-     * @return array
+     * @return array[]
      */
     public function toOptionArray(): array
     {
         return  [
-            ['value' => self::JAVASCRIPT, 'label' => __('Non-jQuery JavaScript Library (Require Advanced Configuration)')],
-            ['value' => self::NATIVE, 'label' => __('Native Browser Lazy Loading')],
+            ['value' => self::ALL, 'label' => __('All')],
+            ['value' => self::SELECTED, 'label' => __('Selected')],
         ];
     }
 

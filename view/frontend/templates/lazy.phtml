@@ -21,7 +21,28 @@
 <?php } ?>
 <?php if ($block->getIsJavascriptLazyLoadMethod()) { ?>
 <script data-rocketjavascript="false">
-    (function(){
+    var utilLoad = setInterval(function() {
+        if (window.scrollY > 100 || isPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"]'))) {
+            loadLazyLoad();
+        }
+    }, 10);
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (isPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"]'))) {
+            loadLazyLoad();
+        } else {
+            document.addEventListener('scroll', loadLazyLoad, { once: true });
+            document.addEventListener('click', loadLazyLoad, { once: true });
+        }
+    });
+
+    function isPixelImageInAViewPort(element, offset = 100)
+    {
+        return element && ((element.getBoundingClientRect().top - offset) < window.innerHeight);
+    }
+
+    function loadLazyLoad() {
+        clearInterval(utilLoad);
         <?php if ($block->isNoScriptEnabled()) { ?>
             document.body.className = document.body.className.replace('mflazyzoad-no-js', '');
         <?php } ?>
@@ -44,7 +65,7 @@
             }
             return true;
         });
-    })();
+    }
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
