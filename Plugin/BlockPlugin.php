@@ -52,20 +52,27 @@ class BlockPlugin
     protected $labelsValues = [];
 
     /**
+     * @var array
+     */
+    protected $skipBlocks = [];
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Config $config
+     * @param array $skipBlocks
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        Config $config
+        Config $config,
+        array $skipBlocks
     ) {
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
         $this->config = $config;
+        $this->skipBlocks = $skipBlocks;
     }
-
 
     /**
      * @param \Magento\Framework\View\Element\AbstractBlock $block
@@ -170,7 +177,13 @@ class BlockPlugin
             $count++;
             if ($count <= $numberOfReplacements) {
                 $label = self::REPLACEMENT_LABEL . '_' . $count;
-                $this->labelsValues[$label] = $match[0];
+                $imgTag = $match[0];
+
+                if (strpos($imgTag, 'mfdislazy') === false) {
+                    $imgTag = str_replace('<img ', '<img mfdislazy="1" ', $imgTag);
+                }
+
+                $this->labelsValues[$label] = $imgTag;
 
                 return $label;
             }
@@ -211,7 +224,7 @@ class BlockPlugin
             return false;
         }
 
-        if ($this->config->getIsAllBlocksAddedToLazy()) {
+        if ($this->config->getIsAllBlocksAddedToLazy() && !$this->isBlockSkiped($block)) {
             return true;
         }
 
@@ -224,5 +237,14 @@ class BlockPlugin
         }
 
         return true;
+    }
+
+    /**
+     * @param $block
+     * @return bool
+     */
+    private function isBlockSkiped($block): bool
+    {
+        return in_array(get_class($block), $this->skipBlocks);
     }
 }

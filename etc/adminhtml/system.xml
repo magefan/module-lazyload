@@ -31,14 +31,12 @@
                 <field id="method" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="27" translate="label comment" type="select"  canRestore="1">
                     <label>Method</label>
                     <source_model>Magefan\LazyLoad\Model\Config\Source\Method</source_model>
+                    <frontend_model>Magefan\LazyLoad\Block\Adminhtml\System\Config\Form\Js</frontend_model>
                 </field>
 
                 <field id="blocks_to_lazy_load" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="28" translate="label comment" type="select"  canRestore="1">
                     <label>Blocks To Lazy Load</label>
                     <source_model>Magefan\LazyLoad\Model\Config\Source\BlocksToLazyLoad</source_model>
-                    <depends>
-                        <field id="method">0</field>
-                    </depends>
 
                     <comment><![CDATA[
                            <strong>If the "All" option is chosen:</strong><br/>
@@ -52,7 +50,7 @@
                 <field id="lazy_blocks" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label" type="textarea" canRestore="1">
                     <label>Lazy Load Blocks</label>
                     <frontend_model>Magefan\LazyLoad\Block\Adminhtml\System\Config\Form\DynamicRow</frontend_model>
-                    <backend_model>Magefan\LazyLoad\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     <comment><![CDATA[
                         Lazy load functionality will be automatically applied to images inside this blocks. You can use block name, block PHP class, or .phtml template name.<br/>
                         <strong>Example:</strong><br/>
@@ -61,10 +59,6 @@
                         Vendor_ModuleName::folder/mytemplate.phtml<br/>
                         folder/sometemplate.phtml
                         ]]></comment>
-                    <depends>
-<!--                        <field id="blocks_to_lazy_load">1</field>-->
-                        <field id="method">0</field>
-                    </depends>
                 </field>
                 <field id="noscript" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40" translate="label comment" type="select" canRestore="1">
                     <label>Include Noscript HTML Tag</label>

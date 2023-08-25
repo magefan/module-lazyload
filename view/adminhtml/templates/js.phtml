@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+?>
+
+<script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+        let lazyLoadMethod = document.getElementById('mflazyzoad_general_method');
+
+        lazyLoadMethod.addEventListener('change', process);
+        process();
+
+        function process() {
+            if (lazyLoadMethod.value === '1') {
+                document.body.classList.add('default-lazy-load');
+            } else {
+                document.body.classList.remove('default-lazy-load');
+            }
+        }
+    });
+</script>
+
+<style>
+   .default-lazy-load #row_mflazyzoad_general_blocks_to_lazy_load,
+   .default-lazy-load #row_mflazyzoad_general_lazy_blocks {display: none;}
+</style>
