@@ -100,6 +100,8 @@ class BlockPlugin
                 </noscript>';
             }
 
+            $html = preg_replace('/(<img[^>]*)\s+src\s*=\s*("|\')\s*(.*?)\s*\2([^>]*>)/i', '$1 src=$2$3$2$4', $html);
+
             $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
                 ' data-original="$2" $1 $3/>
                ' . $noscript, $html);
