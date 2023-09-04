@@ -194,13 +194,15 @@ class BlockPlugin
 
     /**
      * @param $html
-     * @return array|string|string[]|null
+     * @return array|mixed|string|string[]
      */
     protected function revertFirstNImageToInital($html)
     {
-        return preg_replace_callback('/' . self::REPLACEMENT_LABEL .'_\d+\b(.*?)/', function ($match) use (&$count) {
-            return $this->labelsValues[$match[0]] ?? $match[0];
-        }, $html);
+        foreach ($this->labelsValues as $labelsValue => $img) {
+            $html = str_replace($labelsValue, $img, $html);
+        }
+
+        return $html;
     }
 
     /**
