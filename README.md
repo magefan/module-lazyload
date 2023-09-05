@@ -12,7 +12,8 @@
 ## Features
   * Allow to load images on your store only when customer can see them. Module reduces page size and number of request.
 
-<a href="https://magefan.com/magento-2-image-lazy-load-extension"><img width="190" height="70" src="https://magefan.com/media/wysiwyg/download-now_1.png"></a>
+<a href="https://magefan.com/magento-2-image-lazy-load-extension"><img width="190" height="70" src="https://cm.magefan.com/wysiwyg/products/download-magefan-extensions.png"></a><a href="https://magefan.com/magento-2-image-lazy-load-extension#live-demo"><img width="190" height="70" src="https://cm.magefan.com/wysiwyg/products/magefan-live-demo.png"></a>
+
   
 ## Compatibility
   * [Magento 2 WebP Optimized Images Extension](https://magefan.com/magento-2-webp-optimized-images)
