@@ -245,7 +245,7 @@ class BlockPlugin
      * @param $block
      * @return bool
      */
-    private function isBlockSkiped($block): bool
+    private function isBlockSkipped($block): bool
     {
         return in_array(get_class($block), $this->skipBlocks);
     }

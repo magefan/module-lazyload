@@ -21,14 +21,14 @@
 <?php } ?>
 <?php if ($block->getIsJavascriptLazyLoadMethod()) { ?>
 <script data-rocketjavascript="false">
-    var utilLoad = setInterval(function() {
-        if (window.scrollY > 100 || isPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"]'))) {
+    window.mfLazyUtilLoad = setInterval(function() {
+        if (window.scrollY > 100 || isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"]'))) {
             loadLazyLoad();
         }
     }, 10);
 
     document.addEventListener("DOMContentLoaded", function () {
-        if (isPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"]'))) {
+        if (isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"]'))) {
             loadLazyLoad();
         } else {
             document.addEventListener('scroll', loadLazyLoad, { once: true });
@@ -36,13 +36,13 @@
         }
     });
 
-    function isPixelImageInAViewPort(element, offset = 100)
+    function isMfLazyPixelImageInAViewPort(element, offset = 100)
     {
         return element && ((element.getBoundingClientRect().top - offset) < window.innerHeight);
     }
 
     function loadLazyLoad() {
-        clearInterval(utilLoad);
+        clearInterval(window.mfLazyUtilLoad);
         <?php if ($block->isNoScriptEnabled()) { ?>
             document.body.className = document.body.className.replace('mflazyzoad-no-js', '');
         <?php } ?>

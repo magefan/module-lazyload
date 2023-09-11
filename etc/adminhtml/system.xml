@@ -31,7 +31,6 @@
                 <field id="method" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="27" translate="label comment" type="select"  canRestore="1">
                     <label>Method</label>
                     <source_model>Magefan\LazyLoad\Model\Config\Source\Method</source_model>
-                    <frontend_model>Magefan\LazyLoad\Block\Adminhtml\System\Config\Form\Js</frontend_model>
                 </field>
 
                 <field id="blocks_to_lazy_load" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="28" translate="label comment" type="select"  canRestore="1">
@@ -40,10 +39,10 @@
 
                     <comment><![CDATA[
                            <strong>If the "All" option is chosen:</strong><br/>
-                           Lazy Load will be added to all blocks. In the "Lazy Load Blocks" section you can skip n images for some blocks to make them visible immediately.
+                           Lazy Load will be added to all blocks. In the "Lazy Load Blocks" section you can skip a few images for some blocks to make them visible immediately.
                            <br/>
                            <strong>If the "Selected" option is chosen:</strong><br/>
-                           You need to specify the blocks in which images should be lazy-loaded. Here you can also skip the first n images.
+                           You need to specify the blocks in which images should be lazy-loaded. Here you can also skip the first few images.
                         ]]></comment>
                 </field>
 
@@ -65,7 +64,7 @@
                     <depends>
                         <field id="method">0</field>
                     </depends>
-                    <tooltip>The noscript HTML element defines a section of HTML that is inserted if a script type on the page is unsupported or if scripting is currently turned off in the browser. This option enables the display of images even when JavaScript is disabled in the browser and lazy load js script cannot be loaded. Note that when enabled it adds extra HTML tags to the page.</tooltip>
+                    <comment>The noscript HTML element defines a section of HTML that is inserted if a script type on the page is unsupported or if scripting is currently turned off in the browser. This option enables the display of images even when JavaScript is disabled in the browser and lazy load js script cannot be loaded. Note that when enabled it adds extra HTML tags to the page.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
