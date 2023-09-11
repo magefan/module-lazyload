@@ -13,6 +13,8 @@
             <general>
                 <mfmodule>LazyLoad</mfmodule>
                 <mftype>1</mftype>
+                <method>1</method>
+                <blocks_to_lazy_load>0</blocks_to_lazy_load>
                 <lazy_blocks>
                     {
                         "_1686830676971_971":{"block_identifier":"footer","first_images_to_skip":"0"},
@@ -29,7 +31,6 @@
                         "_1686830777637_637":{"block_identifier":"product.info.description","first_images_to_skip":""}
                     }
                 </lazy_blocks>
-                <method>0</method>
                 <noscript>0</noscript>
             </general>
         </mflazyzoad>

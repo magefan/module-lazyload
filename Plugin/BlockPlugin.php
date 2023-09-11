@@ -52,20 +52,27 @@ class BlockPlugin
     protected $labelsValues = [];
 
     /**
+     * @var array
+     */
+    protected $skipBlocks = [];
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Config $config
+     * @param array $skipBlocks
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        Config $config
+        Config $config,
+        array $skipBlocks
     ) {
         $this->request = $request;
         $this->scopeConfig = $scopeConfig;
         $this->config = $config;
+        $this->skipBlocks = $skipBlocks;
     }
-
 
     /**
      * @param \Magento\Framework\View\Element\AbstractBlock $block
@@ -74,7 +81,7 @@ class BlockPlugin
      */
     public function afterToHtml(\Magento\Framework\View\Element\AbstractBlock $block, $html)
     {
-        if (!$this->isEnabled($block, (string)$html)) {
+        if (!$html || !$this->isEnabled($block, (string)$html)) {
             return $html;
         }
 
@@ -100,9 +107,11 @@ class BlockPlugin
                 </noscript>';
             }
 
-            $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
-                ' data-original="$2" $1 $3/>
-               ' . $noscript, $html);
+            $html = preg_replace(
+                '#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU',
+                '<img data-original="$2" $1 $3/>' . $noscript,
+                $html
+            );
 
             $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
 
@@ -168,7 +177,13 @@ class BlockPlugin
             $count++;
             if ($count <= $numberOfReplacements) {
                 $label = self::REPLACEMENT_LABEL . '_' . $count;
-                $this->labelsValues[$label] = $match[0];
+                $imgTag = $match[0];
+
+                if (strpos($imgTag, 'mfdislazy') === false) {
+                    $imgTag = str_replace('<img ', '<img mfdislazy="1" ', $imgTag);
+                }
+
+                $this->labelsValues[$label] = $imgTag;
 
                 return $label;
             }
@@ -179,13 +194,15 @@ class BlockPlugin
 
     /**
      * @param $html
-     * @return array|string|string[]|null
+     * @return array|mixed|string|string[]
      */
     protected function revertFirstNImageToInital($html)
     {
-        return preg_replace_callback('/' . self::REPLACEMENT_LABEL .'_\d+\b(.*?)/', function ($match) use (&$count) {
-            return $this->labelsValues[$match[0]] ?? $match[0];
-        }, $html);
+        foreach ($this->labelsValues as $labelsValue => $img) {
+            $html = str_replace($labelsValue, $img, $html);
+        }
+
+        return $html;
     }
 
     /**
@@ -209,6 +226,10 @@ class BlockPlugin
             return false;
         }
 
+        if ($this->config->getIsAllBlocksAddedToLazy() && !$this->isBlockSkiped($block)) {
+            return true;
+        }
+
         if (false !== strpos($html, self::LAZY_TAG)) {
             return true;
         }
@@ -218,5 +239,14 @@ class BlockPlugin
         }
 
         return true;
+    }
+
+    /**
+     * @param $block
+     * @return bool
+     */
+    private function isBlockSkiped($block): bool
+    {
+        return in_array(get_class($block), $this->skipBlocks);
     }
 }

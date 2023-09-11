@@ -12,6 +12,8 @@ namespace Magefan\LazyLoad\Model;
 
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magefan\LazyLoad\Model\Config\Source\Method;
+use Magefan\LazyLoad\Model\Config\Source\BlocksToLazyLoad;
 
 /**
  * Lazy load config
@@ -23,7 +25,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_LAZY_BLOCKS = 'mflazyzoad/general/lazy_blocks';
     const XML_PATH_LAZY_METHOD = 'mflazyzoad/general/method';
     const XML_PATH_LAZY_NOSCRIPT = 'mflazyzoad/general/noscript';
-
+    const XML_PATH_LAZY_BLOCKS_TO_LAZY_LOAD = 'mflazyzoad/general/blocks_to_lazy_load';
 
     /**
      * @var array
@@ -70,7 +72,15 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getIsJavascriptLazyLoadMethod(): bool
     {
-        return (0 === (int)$this->getConfig(self::XML_PATH_LAZY_METHOD));
+        return (Method::JAVASCRIPT === (int)$this->getConfig(self::XML_PATH_LAZY_METHOD));
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsAllBlocksAddedToLazy(): bool
+    {
+        return (BlocksToLazyLoad::ALL === (int)$this->getConfig(self::XML_PATH_LAZY_BLOCKS_TO_LAZY_LOAD));
     }
 
     /**
@@ -112,7 +122,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if (null === $this->blocks) {
             $this->blocks = [];
-            
+
             try {
                 $blocks = $this->serializer->unserialize($this->getConfig(self::XML_PATH_LAZY_BLOCKS));
             } catch (\InvalidArgumentException $e) {
