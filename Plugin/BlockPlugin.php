@@ -146,7 +146,7 @@ class BlockPlugin
      * @param string $html
      * @return string
      */
-    private function prepareForNativeBrowserLazyLoad(string $html) :string
+    protected function prepareForNativeBrowserLazyLoad(string $html) :string
     {
         return preg_replace(self::PATTERN, '<img src="$2" $1 $3 loading="lazy" />', $html);
     }
@@ -177,7 +177,7 @@ class BlockPlugin
      * @param int $numberOfReplacements
      * @return string
      */
-    private function removeLoadingLazyAttributeFromFirstNImages(string $html, int $numberOfReplacements):string
+    protected function removeLoadingLazyAttributeFromFirstNImages(string $html, int $numberOfReplacements):string
     {
         $position = 0;
 
@@ -225,7 +225,7 @@ class BlockPlugin
             return false;
         }
 
-        if ($this->config->getIsAllBlocksAddedToLazy() && !$this->isBlockSkiped($block)) {
+        if ($this->config->isAllBlocksAddedToLazy() && !$this->isBlockSkiped($block)) {
             return true;
         }
 
