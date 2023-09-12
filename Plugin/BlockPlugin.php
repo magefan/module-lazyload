@@ -21,6 +21,8 @@ class BlockPlugin
 
     const REPLACEMENT_LABEL = 'mf-lazy';
 
+    const PATTERN = '#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU';
+
     /**
      * Request
      * @var \Magento\Framework\App\RequestInterface
@@ -45,11 +47,6 @@ class BlockPlugin
      * @var \Magefan\LazyLoad\Model\Config
      */
     protected $config;
-
-    /**
-     * @var array
-     */
-    protected $labelsValues = [];
 
     /**
      * @var array
@@ -85,63 +82,73 @@ class BlockPlugin
             return $html;
         }
 
-        if ($this->config->getIsJavascriptLazyLoadMethod()) {
+        $numberOfReplacements = $this->config->getBlockFirstImagesToSkip($this->getBlockIdentifier($block));
 
-            $numberOfReplacements = $this->config->getBlockFirstImagesToSkip(
-                $this->getBlockIdentifier($block)
-            );
+        if ($numberOfReplacements) {
+            $html = $this->removeLoadingLazyAttributeFromFirstNImages($html, $numberOfReplacements);
+        }
 
-            if ($numberOfReplacements) {
-                $html = $this->removeFirstNImagesWithCustomLabel($html, $numberOfReplacements);
-            }
+        $html = $this->config->getIsJavascriptLazyLoadMethod()
+            ? $this->prepareForJsLazyLoad($block, $html)
+            : $this->prepareForNativeBrowserLazyLoad($html);
 
-            $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
-            $tmpSrc = 'TMP_SRC';
+        return $html;
+    }
 
-            $html = str_replace($pixelSrc, $tmpSrc, $html);
 
-            $noscript = '';
-            if ($this->config->isNoScriptEnabled()) {
-                $noscript = '<noscript>
+    /**
+     * @param string $html
+     * @return string
+     */
+    private function prepareForJsLazyLoad($block, string $html): string
+    {
+        $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
+        $tmpSrc = 'TMP_SRC';
+
+        $html = str_replace($pixelSrc, $tmpSrc, $html);
+
+        $noscript = '';
+        if ($this->config->isNoScriptEnabled()) {
+            $noscript = '<noscript>
                     <img src="$2"  $1 $3  />
                 </noscript>';
-            }
+        }
 
-            $html = preg_replace(
-                '#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU',
-                '<img data-original="$2" $1 $3/>' . $noscript,
-                $html
-            );
+        $html = preg_replace(
+            self::PATTERN,
+            '<img data-original="$2" $1 $3/>' . $noscript,
+            $html
+        );
 
-            $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
+        $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
 
-            $html = str_replace($tmpSrc, $pixelSrc, $html);
-            $html = str_replace(self::LAZY_TAG, '', $html);
+        $html = str_replace($tmpSrc, $pixelSrc, $html);
+        $html = str_replace(self::LAZY_TAG, '', $html);
 
-            /* Disable Owl Slider LazyLoad */
-            $html = str_replace(
-                ['"lazyLoad":true,', '&quot;lazyLoad&quot;:true,', 'owl-lazy'],
-                ['"lazyLoad":false,', '&quot;lazyLoad&quot;:false,', ''],
-                $html
-            );
+        /* Disable Owl Slider LazyLoad */
+        $html = str_replace(
+            ['"lazyLoad":true,', '&quot;lazyLoad&quot;:true,', 'owl-lazy'],
+            ['"lazyLoad":false,', '&quot;lazyLoad&quot;:false,', ''],
+            $html
+        );
 
-            /* Fix for page builder bg images */
-            if (false !== strpos($html, 'background-image-')) {
-                $html = str_replace('.background-image-', '.tmpbgimg-', $html);
-                $html = str_replace('background-image-', 'mflazy-background-image mflazy-background-image-', $html);
-                $html = str_replace('.tmpbgimg-', '.background-image-', $html);
-            }
-
-            if ($numberOfReplacements) {
-                $html = $this->revertFirstNImageToInital($html);
-            }
-        } else {
-            $html = preg_replace('#<img(?!\s+mfdislazy)([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', '<img ' .
-                ' src="$2" $1 $3 loading="lazy" />
-               ', $html);
+        /* Fix for page builder bg images */
+        if (false !== strpos($html, 'background-image-')) {
+            $html = str_replace('.background-image-', '.tmpbgimg-', $html);
+            $html = str_replace('background-image-', 'mflazy-background-image mflazy-background-image-', $html);
+            $html = str_replace('.tmpbgimg-', '.background-image-', $html);
         }
 
         return $html;
+    }
+
+    /**
+     * @param string $html
+     * @return string
+     */
+    protected function prepareForNativeBrowserLazyLoad(string $html) :string
+    {
+        return preg_replace(self::PATTERN, '<img src="$2" $1 $3 loading="lazy" />', $html);
     }
 
     /**
@@ -166,40 +173,32 @@ class BlockPlugin
     }
 
     /**
-     * @param $html
+     * @param string $html
      * @param int $numberOfReplacements
-     * @return array|string|string[]|null
+     * @return string
      */
-    protected function removeFirstNImagesWithCustomLabel($html, int $numberOfReplacements)
+    protected function removeLoadingLazyAttributeFromFirstNImages(string $html, int $numberOfReplacements):string
     {
-        $count = 0;
-        return preg_replace_callback('#<img([^>]*)(?:\ssrc="([^"]*)")([^>]*)\/?>#isU', function ($match) use (&$count, &$numberOfReplacements) {
-            $count++;
-            if ($count <= $numberOfReplacements) {
-                $label = self::REPLACEMENT_LABEL . '_' . $count;
-                $imgTag = $match[0];
+        $position = 0;
 
-                if (strpos($imgTag, 'mfdislazy') === false) {
-                    $imgTag = str_replace('<img ', '<img mfdislazy="1" ', $imgTag);
+        if (preg_match_all(self::PATTERN, $html, $matches, PREG_OFFSET_CAPTURE) !== false) {
+            foreach ($matches[0] as $i => $match) {
+                if ($i > $numberOfReplacements - 1) {
+                    break;
                 }
 
-                $this->labelsValues[$label] = $imgTag;
+                $offset = $match[1] + $position;
+                $htmlTag = $matches[0][$i][0];
 
-                return $label;
+                $newHtmlTag = str_replace(
+                    ['loading="lazy"', '<img '],
+                    ['', '<img mfdislazy="1" '],
+                    $htmlTag
+                );
+
+                $html = substr_replace($html, $newHtmlTag, $offset, strlen($htmlTag));
+                $position = $position + (strlen($newHtmlTag) - strlen($htmlTag));
             }
-
-            return $match[0];
-        }, $html, $numberOfReplacements);
-    }
-
-    /**
-     * @param $html
-     * @return array|mixed|string|string[]
-     */
-    protected function revertFirstNImageToInital($html)
-    {
-        foreach ($this->labelsValues as $labelsValue => $img) {
-            $html = str_replace($labelsValue, $img, $html);
         }
 
         return $html;
@@ -226,7 +225,7 @@ class BlockPlugin
             return false;
         }
 
-        if ($this->config->getIsAllBlocksAddedToLazy() && !$this->isBlockSkiped($block)) {
+        if ($this->config->isAllBlocksAddedToLazy() && !$this->isBlockSkiped($block)) {
             return true;
         }
 

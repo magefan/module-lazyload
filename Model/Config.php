@@ -78,7 +78,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @return bool
      */
-    public function getIsAllBlocksAddedToLazy(): bool
+    public function isAllBlocksAddedToLazy(): bool
     {
         return (BlocksToLazyLoad::ALL === (int)$this->getConfig(self::XML_PATH_LAZY_BLOCKS_TO_LAZY_LOAD));
     }
