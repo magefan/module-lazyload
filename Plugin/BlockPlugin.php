@@ -225,7 +225,7 @@ class BlockPlugin
             return false;
         }
 
-        if ($this->config->isAllBlocksAddedToLazy() && !$this->isBlockSkiped($block)) {
+        if ($this->config->isAllBlocksAddedToLazy() && !$this->isBlockSkipped($block)) {
             return true;
         }
 
