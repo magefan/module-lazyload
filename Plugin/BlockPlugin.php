@@ -102,10 +102,14 @@ class BlockPlugin
      */
     private function prepareForJsLazyLoad($block, string $html): string
     {
+        $lazyAttribute = ' data-original=';
+
         $pixelSrc = ' src="' . $block->getViewFileUrl('Magefan_LazyLoad::images/pixel.jpg') . '"';
         $tmpSrc = 'TMP_SRC';
+        $tmpDataOriginal = 'TMP_DATA_ORIGINAL';
 
         $html = str_replace($pixelSrc, $tmpSrc, $html);
+        $html = str_replace($lazyAttribute, $tmpDataOriginal, $html);
 
         $noscript = '';
         if ($this->config->isNoScriptEnabled()) {
@@ -120,9 +124,10 @@ class BlockPlugin
             $html
         );
 
-        $html = str_replace(' data-original=', $pixelSrc . ' data-original=', $html);
+        $html = str_replace($lazyAttribute, $pixelSrc . $lazyAttribute, $html);
 
         $html = str_replace($tmpSrc, $pixelSrc, $html);
+        $html = str_replace($tmpDataOriginal, $lazyAttribute, $html);
         $html = str_replace(self::LAZY_TAG, '', $html);
 
         /* Disable Owl Slider LazyLoad */
