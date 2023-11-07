@@ -33,6 +33,7 @@
         } else {
             document.addEventListener('scroll', loadLazyLoad, { once: true });
             document.addEventListener('click', loadLazyLoad, { once: true });
+            clearInterval(window.mfLazyUtilLoad);
         }
     });
 
