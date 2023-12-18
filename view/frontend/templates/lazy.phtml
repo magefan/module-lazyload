@@ -22,13 +22,13 @@
 <?php if ($block->getIsJavascriptLazyLoadMethod()) { ?>
 <script data-rocketjavascript="false">
     window.mfLazyUtilLoad = setInterval(function() {
-        if (window.scrollY > 100 || isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"]'))) {
+        if (window.scrollY > 100 || isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"], main .mflazy-background-image'))) {
             loadLazyLoad();
         }
     }, 10);
 
     document.addEventListener("DOMContentLoaded", function () {
-        if (isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"]'))) {
+        if (isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"], main .mflazy-background-image'))) {
             loadLazyLoad();
         } else {
             document.addEventListener('scroll', loadLazyLoad, { once: true });
