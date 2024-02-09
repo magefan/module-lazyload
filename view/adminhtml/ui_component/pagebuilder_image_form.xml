@@ -21,7 +21,7 @@
                         <item name="true" xsi:type="number">1</item>
                         <item name="false" xsi:type="number">0</item>
                     </item>
-                    <item name="default" xsi:type="number">1</item>
+                    <item name="default" xsi:type="number">0</item>
                 </item>
             </argument>
         </field>
