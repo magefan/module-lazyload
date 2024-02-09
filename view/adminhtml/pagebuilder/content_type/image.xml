@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_PageBuilder:etc/content_type.xsd">
+    <type name="image">
+        <appearances>
+            <appearance name="full-width">
+                <elements>
+                    <element name="desktop_image">
+                        <attribute name="exlude_from_lazy_load" source="mfdislazy"/>
+                    </element>
+                    <element name="mobile_image">
+                        <attribute name="exlude_from_lazy_load" source="mfdislazy"/>
+                    </element>
+                </elements>
+            </appearance>
+        </appearances>
+    </type>
+</config>
