@@ -9,7 +9,7 @@
         "magefan/module-rocketjavascript": "Install Rocket JavaScript to optimize JS loading."
     },
     "type": "magento2-module",
-    "version": "2.1.3",
+    "version": "2.1.4",
     "authors": [
         {
             "name": "Magefan",
