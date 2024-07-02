@@ -9,6 +9,7 @@
 <?php
 /**
  * @var $block \Magefan\LazyLoad\Block\Lazy
+ * @var $mfSecureRenderer \Magefan\Community\Api\SecureHtmlRendererInterface
  */
 ?>
 <?php if ($block->isNoScriptEnabled()) { ?>
@@ -20,15 +21,16 @@
     </style>
 <?php } ?>
 <?php if ($block->getIsJavascriptLazyLoadMethod()) { ?>
-<script data-rocketjavascript="false">
+<?php
+$script = "
     window.mfLazyUtilLoad = setInterval(function() {
-        if (window.scrollY > 100 || isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"], main .mflazy-background-image, div[data-original]'))) {
+        if (window.scrollY > 100 || isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'))) {
             loadLazyLoad();
         }
     }, 10);
 
-    document.addEventListener("DOMContentLoaded", function () {
-        if (isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$="pixel.jpg"], main .mflazy-background-image, div[data-original]'))) {
+    document.addEventListener('DOMContentLoaded', function () {
+        if (isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'))) {
             loadLazyLoad();
         } else {
             document.addEventListener('scroll', loadLazyLoad, { once: true });
@@ -43,13 +45,13 @@
 
     function loadLazyLoad() {
         clearInterval(window.mfLazyUtilLoad);
-        <?php if ($block->isNoScriptEnabled()) { ?>
+        " . ($block->isNoScriptEnabled() ? "
             document.body.className = document.body.className.replace('mflazyzoad-no-js', '');
-        <?php } ?>
-        var jsSrc = '<?php echo $block->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js'); ?>';
-        function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement("script")).type="text/javascript",a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&"complete"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName("script")[0]).parentNode.insertBefore(a,r)}
+        " : "") . "
+        var jsSrc = '{$block->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js')}';
+        function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement('script')).type='text/javascript',a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&\"complete\"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName('script')[0]).parentNode.insertBefore(a,r)}
         loadScript(jsSrc, function(){
-            var lazyLoadConfig = <?= $block->getLazyLoadConfig() ?>;
+            var lazyLoadConfig = {$block->getLazyLoadConfig()};
             var myLazyLoad = false;
             if (document.readyState !== 'loading') {
                 myLazyLoad = new LazyLoad(lazyLoadConfig);
@@ -57,7 +59,7 @@
                     new LazyLoad(lazyLoadConfig);
                 }, 2000);
             } else {
-                document.addEventListener("DOMContentLoaded", function() {
+                document.addEventListener('DOMContentLoaded', function() {
                     myLazyLoad = new LazyLoad(lazyLoadConfig);
                     setTimeout(function(){
                         new LazyLoad(lazyLoadConfig);
@@ -65,7 +67,7 @@
                 });
             }
 
-            document.body.addEventListener("contentUpdated", function(){
+            document.body.addEventListener('contentUpdated', function(){
                 if (myLazyLoad) {
                     myLazyLoad.update();
                 }
@@ -73,9 +75,13 @@
             return true;
         });
     }
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
+";
+?>
+<?= /* @noEscape */ $mfSecureRenderer->renderTag('script', ['data-rocketjavascript' => 'false'], $script, false) ?>
+<?php
+
+$script = "
+    document.addEventListener('DOMContentLoaded', function() {
         function replacePixelImage(img) {
             if (!img.classList.contains('loaded')) {
                 var src = img.getAttribute('data-original');
@@ -96,19 +102,19 @@
         var productInfoDetailedImg = document.querySelector('.product.info.detailed .data.item.title a');
         if(productInfoDetailedImg){
             productInfoDetailedImg.addEventListener('click', function () {
-                document.querySelectorAll('.product.info.detailed img[data-original^="h"],.product.info.detailed source[data-originalset^="h"]').forEach(function(el){
+                document.querySelectorAll('.product.info.detailed img[data-original^=\"h\"],.product.info.detailed source[data-originalset^=\"h\"]').forEach(function(el){
                     replacePixelImage(el);
                 });
             });
         }
 
         document.querySelectorAll('.nav-sections, .navigation-bar').forEach(function(el){
-            el.addEventListener("click", handlerMouseEvent, false);
-            el.addEventListener("mouseenter", handlerMouseEvent, false);
+            el.addEventListener('click', handlerMouseEvent, false);
+            el.addEventListener('mouseenter', handlerMouseEvent, false);
         });
 
         function handlerMouseEvent(e) {
-            e.target.querySelectorAll('img[data-original^="h"],source[data-originalset^="h"]').forEach(function (el) {
+            e.target.querySelectorAll('img[data-original^=\"h\"],source[data-originalset^=\"h\"]').forEach(function (el) {
                 replacePixelImage(el);
             });
         }
@@ -156,7 +162,9 @@
             });
         }, 2000);
     });
-</script>
+";
+?>
+<?= /* @noEscape */ $mfSecureRenderer->renderTag('script', [], $script, false) ?>
 <?php } ?>
 
 <style>
