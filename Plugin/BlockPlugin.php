@@ -197,7 +197,7 @@ class BlockPlugin
 
                 $newHtmlTag = str_replace(
                     ['loading="lazy"', '<img '],
-                    ['', '<img mfdislazy="1" '],
+                    ['', '<img mfdislazy="1" fetchpriority="high" '],
                     $htmlTag
                 );
 
