@@ -10,6 +10,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="mflazyzoad" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10619842770" translate="label">
+            <class>mflazyzoad</class>
             <label>Image Lazy Load</label>
             <tab>magefan</tab>
             <resource>Magefan_LazyLoad::config_magefan_lazyload</resource>
