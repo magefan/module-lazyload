@@ -39,7 +39,7 @@ Try out our open demo and if you like our extension **please give us some star o
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://opt.demo.magefan.top/">
+        <a href="https://ill.demo.magefan.top/">
           <img
             src="https://magefan.com/static/version1520969775/frontend/Magefan/new/en_US/images/product-tab-demo-1.jpg"
             alt="Magento 2 Image Lazy Load Extension Storefront Demo"
@@ -48,7 +48,7 @@ Try out our open demo and if you like our extension **please give us some star o
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://opt.demo.magefan.top/admin/admin/">
+        <a href="https://ill.demo.magefan.top/admin/admin/">
           <img
             src="https://cs.magefan.com/version1732118579/frontend/Magefan/next/en_US/Magefan_CssOptimizer/images/product-tab-demo-2.jpg"
             alt="Magento 2 Image Lazy Load Extension Admin Panel Demo"
@@ -59,12 +59,12 @@ Try out our open demo and if you like our extension **please give us some star o
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://opt.demo.magefan.top/">
+        <a href="https://ill.demo.magefan.top/">
           view
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://opt.demo.magefan.top/admin/admin/">
+        <a href="https://ill.demo.magefan.top/admin/admin/">
           view
         </a>
       </td>
