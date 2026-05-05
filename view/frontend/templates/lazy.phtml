@@ -23,28 +23,34 @@
 <?php if ($block->getIsJavascriptLazyLoadMethod()) { ?>
 <?php
 $script = "
-    window.mfLazyUtilLoad = setInterval(function() {
-        if (window.scrollY > 100 || isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'))) {
-            loadLazyLoad();
-        }
-    }, 10);
+    var mfLazyLoadTriggered = false;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        if (isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'))) {
-            loadLazyLoad();
-        } else {
-            document.addEventListener('scroll', loadLazyLoad, { once: true });
-            document.addEventListener('click', loadLazyLoad, { once: true });
-        }
-    });
-
-    function isMfLazyPixelImageInAViewPort(element, offset = 100)
-    {
-        return element && ((element.getBoundingClientRect().top - offset) < window.innerHeight);
+    function observeLazyTarget() {
+        var element = document.querySelector(
+            'main img[src\$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'
+        );
+        if (!element) return;
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    loadLazyLoad();
+                    observer.disconnect();
+                }
+            });
+        }, { rootMargin: '100px' });
+        observer.observe(element);
     }
 
+
+    document.addEventListener('DOMContentLoaded', function () {
+        observeLazyTarget();
+        document.addEventListener('scroll', loadLazyLoad, { once: true, passive: true });
+        document.addEventListener('click', loadLazyLoad, { once: true });
+    });
+
     function loadLazyLoad() {
-        clearInterval(window.mfLazyUtilLoad);
+        if (mfLazyLoadTriggered) return;
+        mfLazyLoadTriggered = true;
         " . ($block->isNoScriptEnabled() ? "
             document.body.className = document.body.className.replace('mflazyzoad-no-js', '');
         " : "") . "
@@ -66,7 +72,6 @@ $script = "
                     }, 2000);
                 });
             }
-
             document.body.addEventListener('contentUpdated', function(){
                 if (myLazyLoad) {
                     myLazyLoad.update();
