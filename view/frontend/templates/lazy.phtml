@@ -21,50 +21,66 @@
     </style>
 <?php } ?>
 <?php if ($block->getIsJavascriptLazyLoadMethod()) { ?>
-<?php
-$script = "
-    window.mfLazyUtilLoad = setInterval(function() {
-        if (window.scrollY > 100 || isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'))) {
-            loadLazyLoad();
-        }
-    }, 10);
+    <?php
+    $script = "
+    var mfLazyLoadTriggered = false;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        if (isMfLazyPixelImageInAViewPort(document.querySelector('main img[src$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'))) {
-            loadLazyLoad();
-        } else {
-            document.addEventListener('scroll', loadLazyLoad, { once: true });
-            document.addEventListener('click', loadLazyLoad, { once: true });
-        }
-    });
-
-    function isMfLazyPixelImageInAViewPort(element, offset = 100)
-    {
-        return element && ((element.getBoundingClientRect().top - offset) < window.innerHeight);
+    function observeLazyTarget() {
+        var element = document.querySelector(
+            'main img[src\$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'
+        );
+        if (!element) return;
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    loadLazyLoad();
+                    observer.disconnect();
+                }
+            });
+        }, { rootMargin: '100px' });
+        observer.observe(element);
     }
 
+
+    document.addEventListener('DOMContentLoaded', function () {
+        observeLazyTarget();
+        document.addEventListener('scroll', loadLazyLoad, { once: true, passive: true });
+        document.addEventListener('click', loadLazyLoad, { once: true });
+    });
+
     function loadLazyLoad() {
-        clearInterval(window.mfLazyUtilLoad);
+        if (mfLazyLoadTriggered) return;
+        mfLazyLoadTriggered = true;
         " . ($block->isNoScriptEnabled() ? "
             document.body.className = document.body.className.replace('mflazyzoad-no-js', '');
         " : "") . "
         var jsSrc = '{$block->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js')}';
         function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement('script')).type='text/javascript',a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&\"complete\"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName('script')[0]).parentNode.insertBefore(a,r)}
+
         loadScript(jsSrc, function(){
-            var lazyLoadConfig = {$block->getLazyLoadConfig()};
+            var rawConfig = {$block->getLazyLoadConfig()};
+
+            /* Mapping Magefan attributes to LazyLoad v19 configuration */
+            var lazyLoadConfig = Object.assign({}, rawConfig, {
+                data_src: 'original',
+                class_loading: 'mf-loading',
+                class_loaded: 'mf-loaded',
+                class_error: 'mf-error',
+                use_native: false
+            });
+
             var myLazyLoad = false;
-            if (document.readyState !== 'loading') {
+
+            function initLazy() {
                 myLazyLoad = new LazyLoad(lazyLoadConfig);
-                setTimeout(function(){
-                    new LazyLoad(lazyLoadConfig);
-                }, 2000);
+                /* Backup call for dynamic elements */
+                setTimeout(function(){ myLazyLoad.update(); }, 2000);
+            }
+
+            if (document.readyState !== 'loading') {
+                initLazy();
             } else {
-                document.addEventListener('DOMContentLoaded', function() {
-                    myLazyLoad = new LazyLoad(lazyLoadConfig);
-                    setTimeout(function(){
-                        new LazyLoad(lazyLoadConfig);
-                    }, 2000);
-                });
+                document.addEventListener('DOMContentLoaded', initLazy);
             }
 
             document.body.addEventListener('contentUpdated', function(){
@@ -76,29 +92,29 @@ $script = "
         });
     }
 ";
-?>
-<?= /* @noEscape */ $mfSecureRenderer->renderTag('script', ['data-rocketjavascript' => 'false'], $script, false) ?>
-<?php
+    ?>
+    <?= /* @noEscape */ $mfSecureRenderer->renderTag('script', ['data-rocketjavascript' => 'false'], $script, false) ?>
+    <?php
 
-$script = "
+    $script = "
     document.addEventListener('DOMContentLoaded', function() {
         function replacePixelImage(img) {
-            if (!img.classList.contains('loaded')) {
+            if (!img.classList.contains('mf-loaded')) {
                 var src = img.getAttribute('data-original');
                 if (src) {
                     img.setAttribute('src', src);
-                    img.classList.add('loaded')
+                    img.classList.add('mf-loaded')
                 }
                 var srcset = img.getAttribute('data-originalset');
                 if (srcset) {
                     img.setAttribute('srcset', srcset);
-                    img.classList.add('loaded')
+                    img.classList.add('mf-loaded')
                 }
             }
         }
 
         /* Fix for product tabs */
-        var l = 'loaded';
+        var l = 'mf-loaded';
         var productInfoDetailedImg = document.querySelector('.product.info.detailed .data.item.title a');
         if(productInfoDetailedImg){
             productInfoDetailedImg.addEventListener('click', function () {
@@ -163,8 +179,8 @@ $script = "
         }, 2000);
     });
 ";
-?>
-<?= /* @noEscape */ $mfSecureRenderer->renderTag('script', [], $script, false) ?>
+    ?>
+    <?= /* @noEscape */ $mfSecureRenderer->renderTag('script', [], $script, false) ?>
 <?php } ?>
 
 <style>
