@@ -30,6 +30,11 @@
             'main img[src\$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'
         );
         if (!element) return;
+        // Fix for NoScript
+        if (getComputedStyle(element).display === 'none') {
+              loadLazyLoad();
+              return;
+        }
         var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
