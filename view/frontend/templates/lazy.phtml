@@ -30,11 +30,6 @@
             'main img[src\$=\"pixel.jpg\"], main .mflazy-background-image, div[data-original]'
         );
         if (!element) return;
-        // Fix for NoScript
-        if (getComputedStyle(element).display === 'none') {
-              loadLazyLoad();
-              return;
-        }
         var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
@@ -48,6 +43,9 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
+        " . ($block->isNoScriptEnabled() ? "
+            document.body.className = document.body.className.replace('mflazyzoad-no-js', '');
+        " : "") . "
         observeLazyTarget();
         document.addEventListener('scroll', loadLazyLoad, { once: true, passive: true });
         document.addEventListener('click', loadLazyLoad, { once: true });
@@ -56,9 +54,6 @@
     function loadLazyLoad() {
         if (mfLazyLoadTriggered) return;
         mfLazyLoadTriggered = true;
-        " . ($block->isNoScriptEnabled() ? "
-            document.body.className = document.body.className.replace('mflazyzoad-no-js', '');
-        " : "") . "
         var jsSrc = '{$block->getViewFileUrl('Magefan_LazyLoad::js/lazyload.min.js')}';
         function loadScript(e,t){var a,n,r;n=!1,(a=document.createElement('script')).type='text/javascript',a.src=e,a.onload=a.onreadystatechange=function(){n||this.readyState&&\"complete\"!=this.readyState||(n=!0,t())},(r=document.getElementsByTagName('script')[0]).parentNode.insertBefore(a,r)}
 
